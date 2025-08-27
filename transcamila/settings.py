@@ -77,7 +77,12 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+
+# Diretórios de origem dos arquivos estáticos (para desenvolvimento)
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+# Diretório de destino para collectstatic (para produção)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
