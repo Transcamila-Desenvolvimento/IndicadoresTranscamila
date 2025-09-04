@@ -249,7 +249,7 @@
                     </div>
                     <div class="card-footer">
                         <span class="status-badge status-development"><i class="bi bi-gear"></i> Em Desenvolvimento</span>
-                        <a href="#" class="btn btn-primary">Acessar</a>
+                        <a href="{% url 'dashboard:recrutamento' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
 
@@ -259,53 +259,25 @@
                     <h3>Jornada e Frequência</h3>
                 </div>
                 <div class="card-body">
-                        <p>Avalia a pontualidade dos colaboradores, diferenciando faltas justificadas e injustificadas, e acompanha o uso do banco de horas</p>
+                        <p>Analise de marcações manuais dos colaboradores, faltas justificadas e injustificadas</p>
                     </div>
                     <div class="card-footer">
-                        <span class="status-badge status-development"><i class="bi bi-gear"></i> Em Desenvolvimento</span>
-                        <a href="#" class="btn btn-primary">Acessar</a>
+                        <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <a href="{% url 'dashboard:jornada' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
 
                 <div class="indicator-card">
                 <div class="card-header">
-                    <i class="bi bi-person-fill-check"></i>
-                    <h3>Desempenho</h3>
+                    <i class="bi bi-people-fill"></i>
+                    <h3>Distribuição da força de trabalho</h3>
                 </div>
                 <div class="card-body">
-                        <p>Avalia a performance no período de experiência</p>
+                        <p>Análise de colaboradores por idade, sexo e escolaridade, segmentada por filial, cargo e líder responsável</p>
                     </div>
                     <div class="card-footer">
-                        <span class="status-badge status-development"><i class="bi bi-gear"></i> Em Desenvolvimento</span>
-                        <a href="#" class="btn btn-primary">Acessar</a>
-                    </div>
-                </div>
-
-                   <div class="indicator-card">
-                <div class="card-header">
-                    <i class="bi bi-rocket"></i>
-                    <h3>Treinamento e Desenvolvimento</h3>
-                </div>
-                <div class="card-body">
-                        <p>Avalia o impacto dos treinamentos na produtividade e a adesão aos cursos online, por meio da taxa de conclusão.</p>
-                    </div>
-                    <div class="card-footer">
-                        <span class="status-badge status-development"><i class="bi bi-gear"></i> Em Desenvolvimento</span>
-                        <a href="#" class="btn btn-primary">Acessar</a>
-                    </div>
-                </div>
-
-                  <div class="indicator-card">
-                <div class="card-header">
-                    <i class="bi bi-star-half"></i>
-                    <h3>Clima e Engajamento</h3>
-                </div>
-                <div class="card-body">
-                        <p>Mede a participação em eventos internos e a taxa de implementação das sugestões dos colaboradores.</p>
-                    </div>
-                    <div class="card-footer">
-                        <span class="status-badge status-development"><i class="bi bi-gear"></i> Em Desenvolvimento</span>
-                        <a href="#" class="btn btn-primary">Acessar</a>
+                         <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <a href="{% url 'dashboard:força' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
 
@@ -335,8 +307,8 @@
                         <p>Frequencia de status de OPs: Finalizadas vs. Não Finalizadas</p>
                     </div>
                     <div class="card-footer">
-                       <span class="status-badge status-development"><i class="bi bi-gear"></i> Em Desenvolvimento</span>
-                        <a href="#" class="btn btn-primary">Em breve</a>
+                       <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <a href="{% url 'dashboard:op' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
 
@@ -349,8 +321,8 @@
                         <p>Frequência de guias de ICMS corretas e incorretas</p>
                     </div>
                     <div class="card-footer">
-                       <span class="status-badge status-development"><i class="bi bi-gear"></i> Em Desenvolvimento</span>
-                        <a href="#" class="btn btn-primary">Em breve</a>
+                       <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <a href="{% url 'dashboard:icms' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
 
@@ -363,8 +335,8 @@
                         <p>Frequência de pagamentos realizados que não possuem registro correspondente no sistema (Sem lançamento de nota fiscal)</p>
                     </div>
                     <div class="card-footer">
-                       <span class="status-badge status-development"><i class="bi bi-gear"></i> Em Desenvolvimento</span>
-                        <a href="#" class="btn btn-primary">Em breve</a>
+                       <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <a href="{% url 'dashboard:nf' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
 

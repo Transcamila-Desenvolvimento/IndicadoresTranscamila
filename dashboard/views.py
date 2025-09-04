@@ -45,3 +45,33 @@ def ctesrecebidos_view(request):
 @login_required
 def inadimplencia(request):
     return render(request, 'indicadores/Faturamento/inadimplencia.html')
+
+
+@login_required
+def op(request):
+    return render(request, 'indicadores/Financeiro/op.html')
+
+    
+@login_required
+def icms(request):
+    return render(request, 'indicadores/Financeiro/icms.html')
+
+@login_required
+def nf(request):
+    return render(request, 'indicadores/Financeiro/nf.html')
+
+@login_required
+def força(request):
+    return render(request, 'indicadores/Recursos Humanos/forçadetrabalho.html')
+
+@login_required
+def jornada(request):
+    return render(request, 'indicadores/Recursos Humanos/jornada.html')
+
+
+@login_required
+def recrutamento(request):
+    return render(request, 'indicadores/Recursos Humanos/recrutamento.html')
+
+
+
