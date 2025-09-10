@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard de Indicadores - Transcamila{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        /* ================================================== */
+        /* VARIÁVEIS DE CORES - PERSONALIZE AQUI */
+        /* ================================================== */
+        
+        /* Cores principais */
+        :root {
+            --primary-color: #1089c3;           /* Azul principal */
+            --primary-dark: #0f78ba;            /* Azul escuro */
+            --primary-light: #E3F2FD;           /* Azul claro */
+            
+            --secondary-color: #26A69A;         /* Verde azulado */
+            --accent-color: #FF5722;            /* Laranja */
+            
+            /* Cores de texto */
+            --text-primary: #212121;            /* Texto escuro */
+            --text-secondary: #757575;          /* Texto médio */
+            
+            /* Cores de fundo */
+            --bg-light: #F5F7FB;               /* Fundo claro */
+            --card-light: #FFFFFF;              /* Fundo de cards */
+            
+            /* Cores de borda e divisória */
+            --border-light: #E0E0E0;           /* Bordas claras */
+            --divider-color: #E0E0E0;           /* Divisórias */
+            
+            /* Cores de status */
+            --status-completed: #4CAF50;        /* Verde - concluído */
+            --status-pending: #FF9800;          /* Laranja - pendente */
+            --status-development: #2196F3;      /* Azul - em desenvolvimento */
+            --status-error: #F44336;            /* Vermelho - erro */
+            
+            /* Cores da sidebar */
+            --sidebar-bg: #1565C0;             /* Fundo da sidebar */
+            --sidebar-text: rgba(255,255,255,0.85); /* Texto da sidebar */
+            --sidebar-active: rgba(255,255,255,0.15); /* Item ativo */
+            --sidebar-hover: rgba(255,255,255,0.1);   /* Hover dos itens */
+            
+            /* Gradientes */
+            --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            --gradient-secondary: linear-gradient(135deg, var(--secondary-color), #00796B);
+            
+            /* Sombras */
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.15);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.2);
+        }
+
+        /* ================================================== */
+        /* ESTILOS (não é necessário alterar abaixo) */
+        /* ================================================== */
+        body {
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-light);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            background: var(--gradient-primary);
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo {
+            max-width: 210px;
+            height: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        .sidebar .nav-link {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--sidebar-text);
+            padding: 14px 20px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+            margin: 6px 12px;
+        }
+
+        .sidebar .nav-link i {
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: var(--sidebar-hover);
+            transform: translateX(5px);
+            color: white;
+        }
+
+        .sidebar .nav-link.active {
+            color: white;
+            background-color: var(--sidebar-active);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .sidebar .nav-submenu {
+            margin-left: 24px;
+            border-left: 1px solid rgba(255,255,255,0.1);
+            padding-left: 8px;
+        }
+
+        .sidebar .nav-submenu .nav-link {
+            font-size: 0.95rem;
+            padding: 10px 16px;
+            margin: 4px 0;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+        }
+        
+        .sidebar-footer {
+            padding: 16px;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.85rem;
+            text-align: center;
+            margin-top: auto;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0, 0, 0, 0.1);
+        }
+        
+        .user-info {
+            margin-bottom: 12px;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            color: white;
+            margin-bottom: 4px;
+        }
+        
+        .user-role {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        
+        .btn-logout {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .btn-logout:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 24px 32px;
+            min-height: 100vh;
+            width: calc(100% - 280px);
+            box-sizing: border-box;
+        }
+
+        .welcome-bar {
+            background: linear-gradient(120deg, var(--primary-light), rgba(255,255,255,0.5));
+            border-radius: 12px;
+            padding: 20px 28px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .welcome-text h2 {
+            color: var(--primary-color);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .welcome-text p {
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        .date-display {
+            background: var(--card-light);
+            padding: 10px 18px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .indicators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+
+        .indicator-card {
+            background: var(--card-light);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            border: none;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .indicator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-header {
+            padding: 18px 20px 12px;
+            background: var(--gradient-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-header i {
+            font-size: 1.4rem;
+        }
+
+        .card-header h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .card-body p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .card-footer {
+            padding: 0 20px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 50px;
+        }
+
+        .status-completed {
+            background-color: rgba(76, 175, 80, 0.15);
+            color: var(--status-completed);
+        }
+
+        .status-pending {
+            background-color: rgba(255, 152, 0, 0.15);
+            color: var(--status-pending);
+        }
+
+        .status-development {
+            background-color: rgba(33, 150, 243, 0.15);
+            color: var(--status-development);
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            box-shadow: 0 2px 6px rgba(21, 101, 192, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(21, 101, 192, 0.4);
+        }
+
+        @media (max-width: 1200px) {
+            .indicators-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 240px;
+            }
+            .main-content {
+                width: calc(100% - 240px);
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .main-content {
+                width: 100%;
+                padding: 16px;
+            }
+            
+            .indicators-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .welcome-bar {
+                flex-direction: column;
+                text-align: center;
+                gap: 16px;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-area {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .content-area.active {
+            display: block;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(21, 101, 192, 0.2);
+        }
+    </style>
+</head>
+<body>
+    {% block content %}
+    {% endblock %}
+    
+    <script>
+        // Função para mostrar conteúdo
+        function showContent(contentId) {
+            // Esconde todos os conteúdos
+            document.querySelectorAll('.content-area').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Mostra o conteúdo selecionado
+            document.getElementById(contentId).classList.add('active');
+            
+            // Atualiza o menu ativo
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        // Atualiza a data atual
+        function updateDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateString = now.toLocaleDateString('pt-BR', options);
+            
+            // Atualiza todas as instâncias da data
+            document.querySelectorAll('[id^="current-date"]').forEach(el => {
+                el.textContent = dateString;
+            });
+        }
+
+        // Inicializa a data quando a página carrega
+        document.addEventListener('DOMContentLoaded', function() {
+            updateDate();
+        });
+    </script>
+</body>
+</html>
