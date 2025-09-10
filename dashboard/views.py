@@ -82,9 +82,3 @@ def conferencia(request):
 @login_required
 def lancamento(request):
     return render(request, 'indicadores/Provisao/lancamento.html')
-
-
-
-
-
-
