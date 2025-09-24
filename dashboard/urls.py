@@ -18,4 +18,5 @@ urlpatterns = [
     path('recursoshumanos/recrutamentoeselecao/', views.recrutamento, name='recrutamento'),
     path('provisao/conferencia/', views.conferencia, name='conferencia'),
     path('provisao/lancamentoaeepc/', views.lancamento, name='lancamento'),
+    path('marketing/transcamilanews/', views.tccnews, name='tccnews'),
 ]

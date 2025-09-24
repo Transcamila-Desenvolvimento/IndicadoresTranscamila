@@ -82,3 +82,7 @@ def conferencia(request):
 @login_required
 def lancamento(request):
     return render(request, 'indicadores/Provisao/lancamento.html')
+
+@login_required
+def tccnews(request):
+    return render(request, 'indicadores/Marketing/tccnews.html')
