@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid vh-100 d-flex justify-content-center align-items-center" 
+     style="background: linear-gradient(135deg, #0f78ba, #1089c3);">
+    
+    <div class="card shadow-lg border-0 rounded-4" style="max-width: 420px; width: 100%;">
+        <div class="card-body p-5">
+            
+            <!-- Logo e título -->
+            <div class="text-center mb-4">
+                <img src="{% static 'Transcamila.png' %}" alt="Logo Transcamila" 
+                     class="img-fluid mb-3" style="max-width: 160px;">
+                
+                <h4 class="fw-bold text-dark mb-2">Indicadores Transcamila</h4>
+                <p class="text-muted small mb-0">Informe suas credenciais para continuar</p>
+            
+            </div>
+            
+            <!-- Notificação de credenciais incorretas -->
+            {% if form.errors %}
+            <div id="login-error-alert" class="alert alert-danger alert-dismissible fade show d-flex align-items-center mb-4" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <div>Usuário ou senha incorretos. Por favor, tente novamente.</div>
+                <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endif %}
+            
+            <!-- Alertas de mensagens -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-warning alert-dismissible fade show small py-2" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close btn-close-sm" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            
+            <!-- Formulário -->
+            <form method="POST" class="mt-4">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="username" class="form-label fw-semibold small text-secondary mb-1">Usuário</label>
+                    <input type="text" class="form-control rounded-3 py-2" id="username" 
+                           name="username" required autofocus placeholder="Digite seu usuário">
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="form-label fw-semibold small text-secondary mb-1">Senha</label>
+                    <input type="password" class="form-control rounded-3 py-2" id="password" 
+                           name="password" required placeholder="Digite sua senha">
+                </div>
+                <button type="submit" class="btn btn-primary w-100 py-2 rounded-3 fw-semibold shadow-sm">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Acessar
+                </button>
+            </form>
+            
+            <!-- Rodapé -->
+            <div class="text-center mt-4 pt-3 border-top border-light">
+                <p class="text-muted small mb-0">Problemas para acessar sua conta?</p>
+                <p class="text-muted small">Contate o administrador: adm.ibi@transcamila.com.br</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Fechar automaticamente a notificação de erro após 5 segundos
+    document.addEventListener('DOMContentLoaded', function() {
+        const errorAlert = document.getElementById('login-error-alert');
+        
+        if (errorAlert) {
+            // Configurar o temporizador para fechar após 5 segundos
+            setTimeout(function() {
+                const bsAlert = new bootstrap.Alert(errorAlert);
+                bsAlert.close();
+            }, 5000);
+        }
+    });
+</script>
+{% endblock %}

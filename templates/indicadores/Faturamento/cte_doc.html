@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Analise Faturados x A faturar - Documentação</title>
+  
+  <!-- Fonte -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg-soft:#f5f6f8;
+      --stroke:#e6e8ec;
+      --text:#0f1e37;
+      --muted:#8a94a6;
+      --white:#ffffff;
+      --icon-bg:#ffffff;
+      --icon-stroke:#dfe3ea;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%; margin:0; padding:0;}
+    body{
+      margin:0; padding:24px; background:#ffffff;
+      font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+    }
+
+    .header{
+      background:var(--bg-soft);
+      border:1px solid var(--stroke);
+      border-radius:12px;
+      padding:14px 20px;
+      display:flex; align-items:center; justify-content:space-between;
+      box-shadow:0 1px 0 rgba(15,23,42,.02) inset;
+      width:100%;
+      max-width:100%;
+      position:relative;
+    }
+    .trail{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+
+    .chip-icon{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:28px; height:28px; border-radius:8px;
+      background:var(--icon-bg);
+      border:1px solid var(--icon-stroke);
+      font-size:16px;
+      color:var(--text);
+    }
+    .crumb{display:inline-flex; align-items:center; gap:8px}
+    .crumb a, .crumb span{color:var(--text); text-decoration:none;}
+    .sep{color:var(--muted)}
+
+    .menu-btn{
+      width:36px; height:36px; border-radius:8px; background:var(--white);
+      border:1px solid var(--icon-stroke);
+      display:inline-flex; align-items:center; justify-content:center;
+      cursor:pointer; transition:transform .06s ease;
+    }
+    .menu-btn:active{transform:scale(.97)}
+    .menu-lines{display:grid; gap:4px}
+    .menu-lines span{display:block; width:18px; height:2px; background:var(--text); border-radius:2px}
+
+    .trail span, .trail a{font-size:14px; line-height:1}
+
+    @media (max-width:640px){
+      body{padding:16px}
+      .header{padding:12px 14px}
+      .chip-icon{width:26px; height:26px; font-size:14px}
+      .trail span, .trail a{font-size:13px}
+    }
+
+    /* Dropdown */
+    .dropdown{
+      position:absolute;
+      top:60px;
+      right:20px;
+      background:var(--white);
+      border:1px solid var(--icon-stroke);
+      border-radius:8px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.08);
+      display:none;
+      flex-direction:column;
+      min-width:200px;
+      z-index:100;
+      overflow:hidden;
+    }
+    .dropdown a{
+      padding:10px 14px;
+      text-decoration:none;
+      color:var(--text);
+      font-size:14px;
+      display:flex; align-items:center; gap:8px;
+      cursor:pointer;
+    }
+    .dropdown a:hover{
+      background:var(--bg-soft);
+    }
+    .dropdown.show{display:flex}
+    .dropdown i{font-size:16px}
+
+    /* Google Docs iframe */
+    .docs-frame{
+      margin-top:20px;
+      width:100%;
+      height:calc(100vh - 100px);
+      border:none;
+      border-radius:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <header class="header" aria-label="Cabeçalho de navegação">
+    <nav class="trail" aria-label="Breadcrumb">
+      <span class="crumb">
+        <span class="chip-icon"><i class="bi bi-speedometer2"></i></span>
+        <span>Indicadores</span>
+      </span>
+      <span class="sep">/</span>
+
+      <span class="crumb">
+        <span class="chip-icon"><i class="bi bi-currency-dollar"></i></span>
+        <span>Faturamento</span>
+      </span>
+      <span class="sep">/</span>
+        <span class="crumb">
+       <span class="chip-icon"><i class="bi bi-file-earmark-text"></i></span>
+        <span>Analise Faturados x A faturar</span>
+      </span>
+      <span class="sep">/</span>
+
+      <span class="crumb">
+        <span class="chip-icon"><i class="bi bi-file-earmark-text"></i></span>
+        <span>Documentação</span>
+      </span>
+    </nav>
+
+    <button class="menu-btn" aria-label="Mais opções" onclick="toggleMenu()">
+      <span class="menu-lines" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+    </button>
+
+    <div id="dropdownMenu" class="dropdown">
+      <a href="{% url 'dashboard:cte' %}">
+        <i class="bi bi-arrow-left"></i>
+        Voltar
+      </a>
+    </div>
+  </header>
+
+  <!-- Google Docs iframe -->
+  <iframe 
+    class="docs-frame"
+    title="Documentação do Dashboard"
+    src="https://docs.google.com/document/d/1VynzscE8dUFhNPqUybY1vjz1TZwUw-2bNyM2_Y_VfJU/edit?tab=t.0">
+  </iframe>
+
+  <script>
+    function toggleMenu(){
+      document.getElementById('dropdownMenu').classList.toggle('show');
+    }
+    
+    document.addEventListener('click', function(e){
+      const menuBtn = document.querySelector('.menu-btn');
+      const dropdown = document.getElementById('dropdownMenu');
+      if(!menuBtn.contains(e.target) && !dropdown.contains(e.target)){
+        dropdown.classList.remove('show');
+      }
+    });
+  </script>
+</body>
+</html>

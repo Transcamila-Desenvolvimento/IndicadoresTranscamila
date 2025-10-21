@@ -1,0 +1,334 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="app-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-nav">
+            <div class="sidebar-header">
+                <img src="{% static 'Transcamila.png' %}" alt="Logo Transcamila" class="logo">
+            </div>
+            
+            <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 20px;">
+
+            <ul class="nav nav-pills flex-column mb-auto" style="padding: 0 12px;">
+                <li>
+                    <a href="#" class="nav-link">
+                        <i class="bi bi-bar-chart-line"></i>
+                        Indicadores
+                    </a>
+                    <ul class="nav flex-column nav-submenu mt-2">
+                        <li><a href="#" class="nav-link active" onclick="showContent('faturamento')"><i class="bi bi-cash-coin"></i> Faturamento</a></li>
+                        <li><a href="#" class="nav-link" onclick="showContent('provisao')"><i class="bi bi-receipt"></i> Provisão</a></li>
+                        <li><a href="#" class="nav-link" onclick="showContent('marketing')"><i class="bi bi-bullseye"></i> Marketing</a></li>
+                        <li><a href="#" class="nav-link" onclick="showContent('rh')"><i class="bi bi-people"></i> RH</a></li>
+                        <li><a href="#" class="nav-link" onclick="showContent('financeiro')"><i class="bi bi-bank"></i> Financeiro</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-name">
+                    {% if user.first_name and user.last_name %}
+                        {{ user.first_name }} {{ user.last_name }}
+                    {% else %}
+                        {{ user.username }}
+                    {% endif %}
+                </div>
+                <div class="user-role">
+                    {% if user.is_superuser %}
+                        Administrador
+                    {% else %}
+                        Usuário
+                    {% endif %}
+                </div>
+            </div>
+            <a href="{% url 'logout' %}" class="btn btn-sm btn-logout">
+                <i class="bi bi-box-arrow-right me-1"></i> Encerrar Sessão
+            </a>
+        </div>
+    </div>
+
+
+    <!-- Conteúdo principal -->
+    <div class="main-content">
+        <!-- Área de Faturamento -->
+        <div id="faturamento" class="content-area active">
+            <div class="welcome-bar">
+                <div class="welcome-text">
+                    <h2>Indicadores de Faturamento</h2>
+                    <p>Monitore e analise os principais KPIs de faturamento</p>
+                </div>
+                <div class="date-display">
+                    <i class="bi bi-calendar3"></i> 
+                    <span id="current-date"></span>
+                </div>
+            </div>
+            
+            <h2 class="section-title"><i class=""></i></h2>
+
+            <div class="indicators-grid">
+                <div class="indicator-card">
+                    <div class="card-header">
+                        <i class="bi bi-currency-dollar"></i>
+                        <h3>Analise de Faturados x A faturar</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Exibe o faturamento já concluído e o que ainda está pendente com status de prazo, junto das baixas registradas.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <a href="{% url 'dashboard:cte' %}" class="btn btn-primary">Acessar</a>
+                    </div>
+                </div>
+
+                <div class="indicator-card">
+                    <div class="card-header">
+                        <i class="bi bi-box-seam"></i>
+                        <h3>Volume de CTE's Recebidos diariamente</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Volume de CTE's recebidos diariamente, entregues pela logística e malote (Média de dias entre emissão e recebimento).</p>
+                    </div>
+                    <div class="card-footer">
+                         <span class="status-badge status-completed"><i class="bi bi-check-circle"></i>Finalizado</span>
+                        <a href="{% url 'dashboard:cterecebidos' %}" class="btn btn-primary">Acessar</a>
+                    </div>
+                </div>
+
+                <div class="indicator-card">
+                    <div class="card-header">
+                        <i class="bi bi-currency-dollar"></i>
+                        <h3>Analise de Vencidos X a vencer</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Mostra a relação entre o que já está vencido e o que ainda vai vencer nos recebíveis de cada cliente. Inclui o histórico de inadimplência e a média de dias em atraso</p>
+                    </div>
+                    <div class="card-footer">
+                         <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <a href="{% url 'dashboard:inadimplencia' %}" class="btn btn-primary">Acessar</a>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+        
+        <!-- Outras áreas de conteúdo -->
+        <div id="provisao" class="content-area">
+            <div class="welcome-bar">
+                <div class="welcome-text">
+                    <h2>Indicadores de Provisão</h2>
+                    <p>Monitore e analise os principais KPIs de provisão da Transcamila</p>
+                </div>
+                <div class="date-display">
+                    <i class="bi bi-calendar3"></i> 
+                    <span id="current-date-provisao"></span>
+                </div>
+            </div>
+            <h2 class="section-title"><i class=""></i></h2>
+            
+            <div class="indicators-grid">
+                <div class="indicator-card">
+                    <div class="card-header">
+                        <i class="bi bi-person-heart"></i>
+                        <h3>Feedback de Clientes</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Dashboard de pesquisa de satisfação que monitora a experiência do cliente, incluindo métricas sobre prazo de entrega, condição da mercadoria, apresentação do motorista, estado do veículo e qualidade do atendimento recebido</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <a href="{% url 'dashboard:avaliacaodeentregas' %}" class="btn btn-primary">Acessar</a>
+                    </div>
+                </div>
+
+                  <div class="indicator-card">
+                    <div class="card-header">
+                        <i class="bi bi-file-earmark-text"></i>
+                        <h3>Lançamentos de Notas Fiscais</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Acompanhamento dos lançamentos de notas fiscais, incluindo indicadores de despesas por filial, correções e registros diários.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <a href="{% url 'dashboard:lancamento' %}" class="btn btn-primary">Acessar</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        
+        <div id="marketing" class="content-area">
+            <div class="welcome-bar">
+                <div class="welcome-text">
+                    <h2>Indicadores de Marketing</h2>
+                    <p>Monitore e analise os principais KPIs de marketing</p>
+                </div>
+                <div class="date-display">
+                    <i class="bi bi-calendar3"></i> 
+                    <span id="current-date-marketing"></span>
+                </div>
+            </div>
+            <h2 class="section-title"><i class=""></i></h2>
+
+
+            <div class="indicators-grid">
+            <div class="indicator-card">
+                <div class="card-header">
+                    <i class="bi bi-instagram"></i>
+                    <h3>Insights Gerais do Instagram</h3>
+                </div>
+                <div class="card-body">
+                        <p>Monitora o desempenho geral da conta do Instagram, incluindo métricas de engajamento, alcance, impressões e crescimento de seguidores</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <a href="{% url 'dashboard:insightsinstagram' %}" class="btn btn-primary">Acessar</a>
+                    </div>
+                </div>
+
+                  <div class="indicator-card">
+                <div class="card-header">
+                    <i class="bi bi-journal"></i>
+                    <h3>Insights Transcamila News</h3>
+                </div>
+                <div class="card-body">
+                        <p>Analise o desempenho das postagens do Transcamila News, incluindo alcance, engajamento e interações dos leitores.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <a href="{% url 'dashboard:transcamilanews' %}" class="btn btn-primary">Acessar</a>
+                    </div>
+                </div>
+
+            </div>   
+            
+        </div>
+        
+        <div id="rh" class="content-area">
+            <div class="welcome-bar">
+                <div class="welcome-text">
+                    <h2>Indicadores de RH</h2>
+                    <p>Monitore e analise os principais KPIs de recursos humanos da Transcamila</p>
+                </div>
+                <div class="date-display">
+                    <i class="bi bi-calendar3"></i> 
+                    <span id="current-date-rh"></span>
+                </div>
+            </div>
+            <h2 class="section-title"><i class=""></i></h2>
+            <div class="indicators-grid">
+            <div class="indicator-card">
+                <div class="card-header">
+                    <i class="bi bi-people-fill"></i>
+                    <h3>Rotatividade</h3>
+                </div>
+                <div class="card-body">
+                        <p>Acompanhamento mensal e anual de admissões, desligamentos e taxa de rotatividade</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <a href="{% url 'dashboard:recrutamento' %}" class="btn btn-primary">Acessar</a>
+                    </div>
+                </div>
+
+               {% if user.is_authenticated and user.is_staff or user.is_superuser %}
+                <div class="indicator-card">
+                <div class="card-header">
+                <i class="bi bi-person-fill-check"></i>
+                    <h3>Jornada e Frequência</h3>
+                    </div>
+                        <div class="card-body">
+                         <p>Analise de marcações manuais dos colaboradores</p>
+                    </div>
+            <div class="card-footer">
+            <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                <a href="{% url 'dashboard:jornada' %}" class="btn btn-primary">Acessar</a>
+                </div>
+            </div>
+        {% endif %}
+
+                <div class="indicator-card">
+                <div class="card-header">
+                    <i class="bi bi-people-fill"></i>
+                    <h3>Distribuição da força de trabalho</h3>
+                </div>
+                <div class="card-body">
+                        <p>Análise de colaboradores por idade, sexo e escolaridade, segmentada por filial, cargo e líder responsável</p>
+                    </div>
+                    <div class="card-footer">
+                         <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <a href="{% url 'dashboard:força' %}" class="btn btn-primary">Acessar</a>
+                    </div>
+                </div>
+
+            </div>   
+            
+        </div>
+        
+        <div id="financeiro" class="content-area">
+            <div class="welcome-bar">
+                <div class="welcome-text">
+                    <h2>Indicadores Financeiros</h2>
+                    <p>Monitore e analise os principais KPIs financeiros</p>
+                </div>
+                <div class="date-display">
+                    <i class="bi bi-calendar3"></i> 
+                    <span id="current-date-financeiro"></span>
+                </div>
+            </div>
+            <h2 class="section-title"><i class=""></i></h2>
+            <div class="indicators-grid">
+            <div class="indicator-card">
+                <div class="card-header">
+                    <i class="bi bi-file-text"></i>
+                    <h3>Frequencia de status de OPs</h3>
+                </div>
+                <div class="card-body">
+                        <p>Frequencia de status de OPs: Finalizadas vs. Não Finalizadas</p>
+                    </div>
+                    <div class="card-footer">
+                       <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <a href="{% url 'dashboard:op' %}" class="btn btn-primary">Acessar</a>
+                    </div>
+                </div>
+
+                  <div class="indicator-card">
+                <div class="card-header">
+                    <i class="bi bi-file-text"></i>
+                    <h3>Conformidade de Guias de ICMS</h3>
+                </div>
+                <div class="card-body">
+                        <p>Frequência de guias de ICMS corretas e incorretas</p>
+                    </div>
+                    <div class="card-footer">
+                       <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <a href="{% url 'dashboard:icms' %}" class="btn btn-primary">Acessar</a>
+                    </div>
+                </div>
+
+                  <div class="indicator-card">
+                <div class="card-header">
+                    <i class="bi bi-file-text"></i>
+                    <h3>Pagamentos Sem Lançamento</h3>
+                </div>
+                <div class="card-body">
+                        <p>Frequência de pagamentos realizados que não possuem registro correspondente no sistema (Sem lançamento de nota fiscal)</p>
+                    </div>
+                    <div class="card-footer">
+                       <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <a href="{% url 'dashboard:nf' %}" class="btn btn-primary">Acessar</a>
+                    </div>
+                </div>
+
+            </div>   
+            
+        </div>
+{% endblock %}
