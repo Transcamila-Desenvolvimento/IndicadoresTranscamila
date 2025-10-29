@@ -2,6 +2,8 @@
 {% load static %}
 
 {% block content %}
+
+
 <div class="app-container">
     <!-- Sidebar -->
     <div class="sidebar">
@@ -15,6 +17,10 @@
             <ul class="nav nav-pills flex-column mb-auto" style="padding: 0 12px;">
                 <li>
                     <a href="#" class="nav-link">
+                        <i class="bi bi-currency-dollar"></i>
+                        Fluxo de caixa
+                    </a>
+                        <a href="#" class="nav-link">
                         <i class="bi bi-bar-chart-line"></i>
                         Indicadores
                     </a>
@@ -273,14 +279,14 @@
                 <div class="indicator-card">
                 <div class="card-header">
                     <i class="bi bi-people-fill"></i>
-                    <h3>Evolução Salarial</h3>
+                    <h3>Evolução Salarial (Em breve)</h3>
                 </div>
                 <div class="card-body">
                         <p>Acompanhe a variação média dos salários ao longo do tempo, identificando tendências de crescimento, ajustes e períodos de estabilidade na remuneração dos colaboradores.</p>
                     </div>
                     <div class="card-footer">
                         <span class="status-badge status-confidential" style="background-color: #F3C550; color: #815800;"><i class="bi bi-lock"></i> Confidencial</span>
-                        <a href="#" class="btn btn-primary">Acessar</a>
+                        <a href="#" class="btn btn-primary">Em breve</a>
                     </div>
                 </div>
                   {% endif %}
@@ -345,21 +351,10 @@
                     </div>
                 </div>
 
-                           <div class="indicator-card">
-                <div class="card-header">
-                    <i class="bi bi-file-text"></i>
-                    <h3>Fluxo de Caixa</h3>
-                </div>
-                <div class="card-body">
-                        <p>Monitora todas as entradas e saídas financeiras da empresa, permitindo uma visão clara da liquidez, equilíbrio financeiro e capacidade de pagamento ao longo do tempo.</p>
-                    </div>
-                    <div class="card-footer">
-                        <span class="status-badge status-completed" style="background-color: #1089c3; color: white;"><i class="bi bi-unlock2"></i> Liberado</span>
-                        <a href="{% url 'dashboard:icms' %}" class="btn btn-primary">Acessar</a>
-                    </div>
-                </div>
 
             </div>   
             
         </div>
+
+        
 {% endblock %}
