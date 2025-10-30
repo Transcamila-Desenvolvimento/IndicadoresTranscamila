@@ -3,7 +3,6 @@
 
 {% block content %}
 
-
 <div class="app-container">
     <!-- Sidebar -->
     <div class="sidebar">
@@ -16,7 +15,7 @@
 
             <ul class="nav nav-pills flex-column mb-auto" style="padding: 0 12px;">
                 <li>
-                        <a href="#" class="nav-link">
+                    <a href="#" class="nav-link">
                         <i class="bi bi-bar-chart-line"></i>
                         Indicadores
                     </a>
@@ -26,6 +25,9 @@
                         <li><a href="#" class="nav-link" onclick="showContent('marketing')"><i class="bi bi-bullseye"></i> Marketing</a></li>
                         <li><a href="#" class="nav-link" onclick="showContent('rh')"><i class="bi bi-people"></i> RH</a></li>
                         <li><a href="#" class="nav-link" onclick="showContent('financeiro')"><i class="bi bi-bank"></i> Financeiro</a></li>
+                        {% if user.is_authenticated and user.is_staff or user.is_superuser %}
+                        <li><a href="#" class="nav-link" onclick="showContent('saldos-bancarios')"><i class="bi bi-currency-dollar"></i> Saldos Bancários</a></li>
+                         {% endif %}
                     </ul>
                 </li>
             </ul>
@@ -54,7 +56,6 @@
         </div>
     </div>
 
-
     <!-- Conteúdo principal -->
     <div class="main-content">
         <!-- Área de Faturamento -->
@@ -70,7 +71,7 @@
                 </div>
             </div>
             
-            <h2 class="section-title"><i class=""></i></h2>
+            <h2 class="section-title"></h2>
 
             <div class="indicators-grid">
                 <div class="indicator-card">
@@ -114,12 +115,10 @@
                         <a href="{% url 'dashboard:inadimplencia' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
-
-                
             </div>
         </div>
         
-        <!-- Outras áreas de conteúdo -->
+        <!-- Área de Provisão -->
         <div id="provisao" class="content-area">
             <div class="welcome-bar">
                 <div class="welcome-text">
@@ -131,7 +130,7 @@
                     <span id="current-date-provisao"></span>
                 </div>
             </div>
-            <h2 class="section-title"><i class=""></i></h2>
+            <h2 class="section-title"></h2>
             
             <div class="indicators-grid">
                 <div class="indicator-card">
@@ -143,12 +142,12 @@
                         <p>Dashboard de pesquisa de satisfação que monitora a experiência do cliente, incluindo métricas sobre prazo de entrega, condição da mercadoria, apresentação do motorista, estado do veículo e qualidade do atendimento recebido</p>
                     </div>
                     <div class="card-footer">
-                         <span class="status-badge status-completed" style="background-color: #1089c3; color: white;"><i class="bi bi-unlock2"></i> Liberado</span>
+                        <span class="status-badge status-completed" style="background-color: #1089c3; color: white;"><i class="bi bi-unlock2"></i> Liberado</span>
                         <a href="{% url 'dashboard:avaliacaodeentregas' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
 
-                  <div class="indicator-card">
+                <div class="indicator-card">
                     <div class="card-header">
                         <i class="bi bi-file-earmark-text"></i>
                         <h3>Lançamentos de Notas Fiscais</h3>
@@ -161,12 +160,10 @@
                         <a href="{% url 'dashboard:lancamento' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
-
             </div>
         </div>
 
-
-        
+        <!-- Área de Marketing -->
         <div id="marketing" class="content-area">
             <div class="welcome-bar">
                 <div class="welcome-text">
@@ -178,16 +175,15 @@
                     <span id="current-date-marketing"></span>
                 </div>
             </div>
-            <h2 class="section-title"><i class=""></i></h2>
-
+            <h2 class="section-title"></h2>
 
             <div class="indicators-grid">
-            <div class="indicator-card">
-                <div class="card-header">
-                    <i class="bi bi-instagram"></i>
-                    <h3>Insights Gerais do Instagram</h3>
-                </div>
-                <div class="card-body">
+                <div class="indicator-card">
+                    <div class="card-header">
+                        <i class="bi bi-instagram"></i>
+                        <h3>Insights Gerais do Instagram</h3>
+                    </div>
+                    <div class="card-body">
                         <p>Monitora o desempenho geral da conta do Instagram, incluindo métricas de engajamento, alcance, impressões e crescimento de seguidores</p>
                     </div>
                     <div class="card-footer">
@@ -196,12 +192,12 @@
                     </div>
                 </div>
 
-                  <div class="indicator-card">
-                <div class="card-header">
-                    <i class="bi bi-journal"></i>
-                    <h3>Insights Transcamila News</h3>
-                </div>
-                <div class="card-body">
+                <div class="indicator-card">
+                    <div class="card-header">
+                        <i class="bi bi-journal"></i>
+                        <h3>Insights Transcamila News</h3>
+                    </div>
+                    <div class="card-body">
                         <p>Analise o desempenho das postagens do Transcamila News, incluindo alcance, engajamento e interações dos leitores.</p>
                     </div>
                     <div class="card-footer">
@@ -209,11 +205,10 @@
                         <a href="{% url 'dashboard:transcamilanews' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
-
             </div>   
-            
         </div>
         
+        <!-- Área de RH -->
         <div id="rh" class="content-area">
             <div class="welcome-bar">
                 <div class="welcome-text">
@@ -225,14 +220,14 @@
                     <span id="current-date-rh"></span>
                 </div>
             </div>
-            <h2 class="section-title"><i class=""></i></h2>
+            <h2 class="section-title"></h2>
             <div class="indicators-grid">
-            <div class="indicator-card">
-                <div class="card-header">
-                    <i class="bi bi-people-fill"></i>
-                    <h3>Rotatividade</h3>
-                </div>
-                <div class="card-body">
+                <div class="indicator-card">
+                    <div class="card-header">
+                        <i class="bi bi-people-fill"></i>
+                        <h3>Rotatividade</h3>
+                    </div>
+                    <div class="card-body">
                         <p>Acompanhamento mensal e anual de admissões, desligamentos e taxa de rotatividade</p>
                     </div>
                     <div class="card-footer">
@@ -241,28 +236,30 @@
                     </div>
                 </div>
 
-               {% if user.is_authenticated and user.is_staff or user.is_superuser %}
+               
+                {% if user.is_authenticated and user.is_staff or user.is_superuser %}
                 <div class="indicator-card">
                 <div class="card-header">
-                <i class="bi bi-person-fill-check"></i>
-                    <h3>Jornada e Frequência</h3>
+                     <i class="bi bi-person-fill-check"></i>
+                        <h3>Jornada e Frequência</h3>
                     </div>
-                        <div class="card-body">
-                         <p>Analise de marcações manuais dos colaboradores</p>
+                    <div class="card-body">
+                        <p>Analise de marcações manuais dos colaboradores</p>
                     </div>
-            <div class="card-footer">
-            <span class="status-badge status-confidential" style="background-color: #F3C550; color: #815800;"><i class="bi bi-lock"></i> Confidencial</span>
-                <a href="{% url 'dashboard:jornada' %}" class="btn btn-primary">Acessar</a>
-                </div>
+                    <div class="card-footer">
+                    <span class="status-badge status-confidential" style="background-color: #F3C550; color: #815800;"><i class="bi bi-lock"></i> Confidencial</span>
+                    <a href="{% url 'dashboard:jornada' %}" class="btn btn-primary">Acessar</a>
+                    </div>
             </div>
         {% endif %}
+                
 
                 <div class="indicator-card">
-                <div class="card-header">
-                    <i class="bi bi-people-fill"></i>
-                    <h3>Distribuição da força de trabalho</h3>
-                </div>
-                <div class="card-body">
+                    <div class="card-header">
+                        <i class="bi bi-people-fill"></i>
+                        <h3>Distribuição da força de trabalho</h3>
+                    </div>
+                    <div class="card-body">
                         <p>Análise de colaboradores por idade, sexo e escolaridade, segmentada por filial, cargo e líder responsável</p>
                     </div>
                     <div class="card-footer">
@@ -273,11 +270,11 @@
 
                 {% if user.is_authenticated and user.is_staff or user.is_superuser %}
                 <div class="indicator-card">
-                <div class="card-header">
-                    <i class="bi bi-people-fill"></i>
-                    <h3>Evolução Salarial (Em breve)</h3>
-                </div>
-                <div class="card-body">
+                    <div class="card-header">
+                        <i class="bi bi-people-fill"></i>
+                        <h3>Evolução Salarial (Em breve)</h3>
+                    </div>
+                    <div class="card-body">
                         <p>Acompanhe a variação média dos salários ao longo do tempo, identificando tendências de crescimento, ajustes e períodos de estabilidade na remuneração dos colaboradores.</p>
                     </div>
                     <div class="card-footer">
@@ -285,13 +282,12 @@
                         <a href="#" class="btn btn-primary">Em breve</a>
                     </div>
                 </div>
-                  {% endif %}
-
-            
+                {% endif %}
+                
             </div>   
-            
         </div>
         
+        <!-- Área de Financeiro -->
         <div id="financeiro" class="content-area">
             <div class="welcome-bar">
                 <div class="welcome-text">
@@ -303,14 +299,14 @@
                     <span id="current-date-financeiro"></span>
                 </div>
             </div>
-            <h2 class="section-title"><i class=""></i></h2>
+            <h2 class="section-title"></h2>
             <div class="indicators-grid">
-            <div class="indicator-card">
-                <div class="card-header">
-                    <i class="bi bi-file-text"></i>
-                    <h3>Frequencia de status de OPs</h3>
-                </div>
-                <div class="card-body">
+                <div class="indicator-card">
+                    <div class="card-header">
+                        <i class="bi bi-file-text"></i>
+                        <h3>Frequencia de status de OPs</h3>
+                    </div>
+                    <div class="card-body">
                         <p>Frequencia de status de OPs: Finalizadas vs. Não Finalizadas</p>
                     </div>
                     <div class="card-footer">
@@ -319,12 +315,12 @@
                     </div>
                 </div>
 
-                  <div class="indicator-card">
-                <div class="card-header">
-                    <i class="bi bi-file-text"></i>
-                    <h3>Conformidade de Guias de ICMS</h3>
-                </div>
-                <div class="card-body">
+                <div class="indicator-card">
+                    <div class="card-header">
+                        <i class="bi bi-file-text"></i>
+                        <h3>Conformidade de Guias de ICMS</h3>
+                    </div>
+                    <div class="card-body">
                         <p>Frequência de guias de ICMS corretas e incorretas</p>
                     </div>
                     <div class="card-footer">
@@ -333,12 +329,12 @@
                     </div>
                 </div>
 
-                  <div class="indicator-card">
-                <div class="card-header">
-                    <i class="bi bi-file-text"></i>
-                    <h3>Pagamentos Sem Lançamento</h3>
-                </div>
-                <div class="card-body">
+                <div class="indicator-card">
+                    <div class="card-header">
+                        <i class="bi bi-file-text"></i>
+                        <h3>Pagamentos Sem Lançamento</h3>
+                    </div>
+                    <div class="card-body">
                         <p>Frequência de pagamentos realizados que não possuem registro correspondente no sistema (Sem lançamento de nota fiscal)</p>
                     </div>
                     <div class="card-footer">
@@ -346,11 +342,241 @@
                         <a href="{% url 'dashboard:nf' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
-
-
             </div>   
-            
         </div>
 
-        
+        <!-- Área de Saldos Bancários -->
+        <div id="saldos-bancarios" class="content-area">
+            
+
+            <div class="dashboard" style="padding: 20px; background: #f5f7fa; border-radius: 12px; margin-top: 20px;">
+                <div class="header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                    <h1 style="font-weight: 600; margin: 0;">Saldos bancários</h1>
+                    <div class="date" id="current-time" style="background: #148ec4; color: white; padding: 8px 15px; border-radius: 20px; font-size: 14px;">Carregando...</div>
+                </div>
+
+                <div class="summary-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                    <div class="card highlight" style="background: linear-gradient(135deg, #1b5e99, #148ec4); color: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <div class="card-title" style="font-size: 14px; color: rgba(255,255,255,.8);">SALDO BANCO</div>
+                        <div class="card-value" id="saldo" style="font-size: 24px; font-weight: 700; margin: 8px 0; color: white;">R$ 0,00</div>
+                        <div class="card-description" style="font-size: 12px; color: rgba(255,255,255,.8);">Saldo total em contas</div>
+                    </div>
+                    <div class="card" style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <div class="card-title" style="font-size: 14px; color: #95a5a6;">LIMITE</div>
+                        <div class="card-value" id="limite" style="font-size: 24px; font-weight: 700; margin: 8px 0; color: #2c3e50;">R$ 0,00</div>
+                        <div class="card-description" style="font-size: 12px; color: #95a5a6;">Limite de crédito disponível</div>
+                    </div>
+                    <div class="card" style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <div class="card-title" style="font-size: 14px; color: #95a5a6;">CH EM TRÂNSITO</div>
+                        <div class="card-value" id="cheque" style="font-size: 24px; font-weight: 700; margin: 8px 0; color: #2c3e50;">R$ 0,00</div>
+                        <div class="card-description" style="font-size: 12px; color: #95a5a6;">Cheques em processamento</div>
+                    </div>
+                    <div class="card" style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <div class="card-title" style="font-size: 14px; color: #95a5a6;">DISPONÍVEL</div>
+                        <div class="card-value" id="disponivel" style="font-size: 24px; font-weight: 700; margin: 8px 0; color: #2c3e50;">R$ 0,00</div>
+                        <div class="card-description" style="font-size: 12px; color: #95a5a6;">Valor total disponível</div>
+                    </div>
+                </div>
+
+                <h2 style="margin: 30px 0 20px;">Contas Correntes</h2>
+                <div class="bank-accounts" id="banks" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(600px, 1fr)); gap: 20px;"></div>
+                <div class="status" id="status" style="text-align: right; font-size: 12px; margin-top: 10px;"><span class="loading" style="color: #148ec4;">Carregando dados...</span></div>
+            </div>
+
+            <script>
+                (function() {
+                    const SHEET_ID = '1t_6NFKIgGSIB9qLp3s4ikXcKS8MgV37aiylYSzfjVmo';
+                    const GID = '0';
+                    let lastData = null;
+
+                    const bankLogos = {
+                        'Itaú': 'https://res.cloudinary.com/dnmppxebg/image/upload/v1761795926/Ita%C3%BA_hdct8j.png',
+                        'Santander': 'https://res.cloudinary.com/dnmppxebg/image/upload/v1761795925/santander_opahkg.jpg',
+                        'Bradesco': 'https://res.cloudinary.com/dnmppxebg/image/upload/v1761795925/Bradesco_oeunlq.jpg',
+                        'Banco do Brasil': 'https://res.cloudinary.com/dnmppxebg/image/upload/v1761795925/Banco_do_Brasil_ypj3hp.jpg',
+                        'Banco Daycoval': 'https://res.cloudinary.com/dnmppxebg/image/upload/v1761795925/Daycoval_lw8821.png'
+                    };
+
+                    const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2RkZCIgcng9IjEwIi8+PHRleHQgeD0iNTAlIiB5PSI1NSUiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPj88L3RleHQ+PC9zdmc+';
+
+                    function format(v) {
+                        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0);
+                    }
+
+                    function parseCurrency(val) {
+                        if (val === null || val === undefined) return 0;
+                        const str = val.toString().trim();
+                        if (!str || str === 'R$ 0,00') return 0;
+                        return parseFloat(str.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+                    }
+
+                    function getYesterday() {
+                        const yesterday = new Date();
+                        yesterday.setDate(yesterday.getDate() - 1);
+                        return yesterday.toLocaleDateString('pt-BR');
+                    }
+
+                    async function loadData() {
+                        const status = document.getElementById('status');
+                        status.innerHTML = '<span class="loading" style="color: #148ec4;">Carregando...</span>';
+
+                        try {
+                            const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${GID}&t=${Date.now()}`;
+                            const response = await fetch(url);
+                            if (!response.ok) throw new Error('Falha na rede');
+
+                            const text = await response.text();
+                            const jsonText = text.substring(47, text.length - 2);
+                            const json = JSON.parse(jsonText);
+                            const rows = json.table.rows;
+
+                            const data = { banks: {}, total: { s: 0, l: 0, c: 0, d: 0 } };
+                            let currentBank = null;
+
+                            for (let i = 0; i < rows.length; i++) {
+                                const row = rows[i];
+                                if (!row.c || !row.c[0]) continue;
+
+                                const cellA = row.c[0].v?.toString().trim();
+                                if (!cellA || cellA === getYesterday() || cellA === 'TOTAL') continue;
+
+                                if (!cellA.match(/C[\/\\]C/i)) {
+                                    currentBank = cellA;
+                                    if (!data.banks[currentBank]) {
+                                        data.banks[currentBank] = { acc: [], tot: { s: 0, l: 0, c: 0, d: 0 } };
+                                    }
+                                    continue;
+                                }
+
+                                const conta = cellA.replace(/^C[\/\\]C\s*n[°o]?\s*[:\-]?\s*/gi, '').trim();
+                                const s = parseCurrency(row.c[1]?.v);
+                                const l = parseCurrency(row.c[2]?.v);
+                                const c = parseCurrency(row.c[3]?.v);
+                                const d = parseCurrency(row.c[4]?.v) || (s + l - c);
+
+                                data.banks[currentBank].acc.push({ conta, s, l, c, d });
+                                data.banks[currentBank].tot.s += s;
+                                data.banks[currentBank].tot.l += l;
+                                data.banks[currentBank].tot.c += c;
+                                data.banks[currentBank].tot.d += d;
+
+                                data.total.s += s;
+                                data.total.l += l;
+                                data.total.c += c;
+                                data.total.d += d;
+                            }
+
+                            if (Object.keys(data.banks).length === 0) throw new Error('Nenhum dado');
+
+                            lastData = data;
+                            render(data);
+                            status.textContent = `Atualizado: ${new Date().toLocaleTimeString('pt-BR')}`;
+                        } catch (err) {
+                            console.error('Erro:', err);
+                            status.innerHTML = `<span class="error" style="color: #e74c3c;">Erro: ${err.message}</span>`;
+                            if (lastData) {
+                                render(lastData);
+                                status.innerHTML += ' <small>(dados antigos)</small>';
+                            }
+                        }
+                    }
+
+                    function render(data) {
+                        document.getElementById('current-time').textContent = getYesterday();
+                        document.getElementById('saldo').textContent = format(data.total.s);
+                        document.getElementById('limite').textContent = format(data.total.l);
+                        document.getElementById('cheque').textContent = format(data.total.c);
+                        document.getElementById('disponivel').textContent = format(data.total.d);
+
+                        const container = document.getElementById('banks');
+                        container.innerHTML = '';
+
+                        const bankOrder = ['Itaú', 'Santander', 'Bradesco', 'Banco do Brasil', 'Banco Daycoval'];
+                        bankOrder.forEach(name => {
+                            const bank = data.banks[name];
+                            if (!bank || bank.acc.length === 0) return;
+
+                            const logoUrl = bankLogos[name] || fallbackSvg;
+
+                            let html = `
+                            <div class="bank-card" style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow-x: auto;">
+                                <div class="bank-header" style="display: flex; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0;">
+                                    <div class="bank-logo" style="width: 40px; height: 40px; margin-right: 12px; background: #eee; border-radius: 8px; overflow: hidden;">
+                                        <img src="${logoUrl}" alt="${name}" onerror="this.src='${fallbackSvg}'; this.onerror=null;" style="width: 100%; height: 100%; object-fit: contain;">
+                                    </div>
+                                    <div class="bank-name" style="font-weight: 600; font-size: 18px;">${name}</div>
+                                </div>
+                                <table class="account-table" style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: left; padding: 10px 8px; font-size: 12px; color: #95a5a6; background: #f8f9fa; border-bottom: 1px solid #e0e0e0;">CONTA</th>
+                                            <th style="text-align: left; padding: 10px 8px; font-size: 12px; color: #95a5a6; background: #f8f9fa; border-bottom: 1px solid #e0e0e0;">SALDO</th>
+                                            <th style="text-align: left; padding: 10px 8px; font-size: 12px; color: #95a5a6; background: #f8f9fa; border-bottom: 1px solid #e0e0e0;">LIMITE</th>
+                                            <th style="text-align: left; padding: 10px 8px; font-size: 12px; color: #95a5a6; background: #f8f9fa; border-bottom: 1px solid #e0e0e0;">CH EM TRÂNSITO</th>
+                                            <th style="text-align: left; padding: 10px 8px; font-size: 12px; color: #95a5a6; background: #f8f9fa; border-bottom: 1px solid #e0e0e0;">DISPONÍVEL</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>`;
+
+                            bank.acc.forEach(acc => {
+                                html += `
+                                    <tr>
+                                        <td class="account-number" style="padding: 12px 8px; border-bottom: 1px solid #f5f5f5; font-size: 14px; font-weight: 500; white-space: nowrap;">${acc.conta}</td>
+                                        <td class="account-value" style="padding: 12px 8px; border-bottom: 1px solid #f5f5f5; font-size: 14px; font-weight: 600; color: #2c3e50;">${format(acc.s)}</td>
+                                        <td class="account-value" style="padding: 12px 8px; border-bottom: 1px solid #f5f5f5; font-size: 14px; font-weight: 600; color: #2c3e50;">${format(acc.l)}</td>
+                                        <td class="account-value" style="padding: 12px 8px; border-bottom: 1px solid #f5f5f5; font-size: 14px; font-weight: 600; color: #2c3e50;">${format(acc.c)}</td>
+                                        <td class="account-value" style="padding: 12px 8px; border-bottom: 1px solid #f5f5f5; font-size: 14px; font-weight: 600; color: #2c3e50;">${format(acc.d)}</td>
+                                    </tr>`;
+                            });
+
+                            html += `
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td style="font-weight:700; padding: 12px 8px; background: #f1f5f9; border-top: 2px solid #148ec4; color: #2c3e50;">TOTAL</td>
+                                            <td class="account-value" style="padding: 12px 8px; background: #f1f5f9; border-top: 2px solid #148ec4; color: #2c3e50;">${format(bank.tot.s)}</td>
+                                            <td class="account-value" style="padding: 12px 8px; background: #f1f5f9; border-top: 2px solid #148ec4; color: #2c3e50;">${format(bank.tot.l)}</td>
+                                            <td class="account-value" style="padding: 12px 8px; background: #f1f5f9; border-top: 2px solid #148ec4; color: #2c3e50;">${format(bank.tot.c)}</td>
+                                            <td class="account-value" style="padding: 12px 8px; background: #f1f5f9; border-top: 2px solid #148ec4; color: #2c3e50;">${format(bank.tot.d)}</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>`;
+
+                            container.innerHTML += html;
+                        });
+                    }
+
+                    setInterval(loadData, 15000);
+                    loadData();
+                })();
+            </script>
+        </div>
+    </div>
+</div>
+
+<!-- Função showContent para navegação dinâmica -->
+<script>
+function showContent(id) {
+    document.querySelectorAll('.content-area').forEach(area => {
+        area.classList.remove('active');
+    });
+    document.getElementById(id).classList.add('active');
+
+    document.querySelectorAll('.nav-submenu .nav-link').forEach(link => {
+        link.classList.remove('active');
+    });
+    const activeLink = document.querySelector(`.nav-submenu .nav-link[onclick="showContent('${id}')"]`);
+    if (activeLink) activeLink.classList.add('active');
+}
+
+// Atualiza data atual em todas as seções
+document.addEventListener('DOMContentLoaded', () => {
+    const now = new Date().toLocaleDateString('pt-BR');
+    document.querySelectorAll('[id^="current-date"]').forEach(el => {
+        el.textContent = now;
+    });
+});
+</script>
+
 {% endblock %}
