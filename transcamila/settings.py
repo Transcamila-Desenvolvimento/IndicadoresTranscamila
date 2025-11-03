@@ -1,7 +1,10 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 SECRET_KEY = 'sua-chave-secreta-aqui-mude-em-producao'
 
@@ -81,6 +84,7 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 LOGIN_REDIRECT_URL = '/'
@@ -88,3 +92,11 @@ LOGIN_URL = '/login/'
 LOGOUT_REDIRECT_URL = '/login/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CTE_EMAIL_CONFIG = {
+    'IMAP_SERVER': 'imap.gmail.com',
+    'IMAP_PORT': 993,
+    'EMAIL_ACCOUNT': 'digitalmidia@transcamila.com.br',  # Esta é a conta que vai fazer o login
+    'EMAIL_PASSWORD': os.getenv('EMAIL_PASSWORD', ''),
+    'SSL': True,
+}

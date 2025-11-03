@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load static %}
-
 {% block content %}
 <div class="app-container">
     <!-- Sidebar -->
@@ -9,9 +8,8 @@
             <div class="sidebar-header">
                 <img src="{% static 'Transcamila.png' %}" alt="Logo Transcamila" class="logo">
             </div>
-            
+           
             <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 20px;">
-
             <ul class="nav nav-pills flex-column mb-auto" style="padding: 0 12px;">
                 <li>
                     <a href="#" class="nav-link">
@@ -24,11 +22,18 @@
                         <li><a href="#" class="nav-link" onclick="showContent('marketing')"><i class="bi bi-bullseye"></i> Marketing</a></li>
                         <li><a href="#" class="nav-link" onclick="showContent('rh')"><i class="bi bi-people"></i> RH</a></li>
                         <li><a href="#" class="nav-link" onclick="showContent('financeiro')"><i class="bi bi-bank"></i> Financeiro</a></li>
+                        {% if user.is_authenticated and user.is_staff or user.is_superuser %}
+                        <li><a href="#" class="nav-link" onclick="showContent('saldos-bancarios')"><i class="bi bi-currency-dollar"></i> Saldos Bancários</a></li>
+                        {% endif %}
+                        <!-- DASHBOARD CTEs DIRETO -->
+                        {% if user.is_authenticated and user.is_staff or user.is_superuser %}
+                        <li><a href="#" class="nav-link" onclick="showContent('dashboard-ctes')"><i class="bi bi-truck"></i> CT-es emitidos</a></li>
+                        {% endif %}
                     </ul>
                 </li>
             </ul>
         </div>
-        
+       
         <div class="sidebar-footer">
             <div class="user-info">
                 <div class="user-name">
@@ -52,7 +57,6 @@
         </div>
     </div>
 
-
     <!-- Conteúdo principal -->
     <div class="main-content">
         <!-- Área de Faturamento -->
@@ -63,13 +67,12 @@
                     <p>Monitore e analise os principais KPIs de faturamento</p>
                 </div>
                 <div class="date-display">
-                    <i class="bi bi-calendar3"></i> 
+                    <i class="bi bi-calendar3"></i>
                     <span id="current-date"></span>
                 </div>
             </div>
-            
-            <h2 class="section-title"><i class=""></i></h2>
-
+           
+            <h2 class="section-title"></h2>
             <div class="indicators-grid">
                 <div class="indicator-card">
                     <div class="card-header">
@@ -80,11 +83,10 @@
                         <p>Exibe o faturamento já concluído e o que ainda está pendente com status de prazo, junto das baixas registradas.</p>
                     </div>
                     <div class="card-footer">
-                        <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <span class="status-badge status-completed" style="background-color: #1089c3; color: white;">Liberado</span>
                         <a href="{% url 'dashboard:cte' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
-
                 <div class="indicator-card">
                     <div class="card-header">
                         <i class="bi bi-box-seam"></i>
@@ -94,11 +96,10 @@
                         <p>Volume de CTE's recebidos diariamente, entregues pela logística e malote (Média de dias entre emissão e recebimento).</p>
                     </div>
                     <div class="card-footer">
-                         <span class="status-badge status-completed"><i class="bi bi-check-circle"></i>Finalizado</span>
+                        <span class="status-badge status-completed" style="background-color: #1089c3; color: white;">Liberado</span>
                         <a href="{% url 'dashboard:cterecebidos' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
-
                 <div class="indicator-card">
                     <div class="card-header">
                         <i class="bi bi-currency-dollar"></i>
@@ -108,16 +109,14 @@
                         <p>Mostra a relação entre o que já está vencido e o que ainda vai vencer nos recebíveis de cada cliente. Inclui o histórico de inadimplência e a média de dias em atraso</p>
                     </div>
                     <div class="card-footer">
-                         <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <span class="status-badge status-completed" style="background-color: #1089c3; color: white;">Liberado</span>
                         <a href="{% url 'dashboard:inadimplencia' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
-
-                
             </div>
         </div>
-        
-        <!-- Outras áreas de conteúdo -->
+       
+        <!-- Área de Provisão -->
         <div id="provisao" class="content-area">
             <div class="welcome-bar">
                 <div class="welcome-text">
@@ -125,28 +124,27 @@
                     <p>Monitore e analise os principais KPIs de provisão da Transcamila</p>
                 </div>
                 <div class="date-display">
-                    <i class="bi bi-calendar3"></i> 
+                    <i class="bi bi-calendar3"></i>
                     <span id="current-date-provisao"></span>
                 </div>
             </div>
-            <h2 class="section-title"><i class=""></i></h2>
-            
+            <h2 class="section-title"></h2>
+           
             <div class="indicators-grid">
                 <div class="indicator-card">
                     <div class="card-header">
                         <i class="bi bi-person-heart"></i>
-                        <h3>Feedback de Clientes</h3>
+                        <h2>Feedback de Clientes</h2>
                     </div>
                     <div class="card-body">
                         <p>Dashboard de pesquisa de satisfação que monitora a experiência do cliente, incluindo métricas sobre prazo de entrega, condição da mercadoria, apresentação do motorista, estado do veículo e qualidade do atendimento recebido</p>
                     </div>
                     <div class="card-footer">
-                        <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <span class="status-badge status-completed" style="background-color: #1089c3; color: white;">Liberado</span>
                         <a href="{% url 'dashboard:avaliacaodeentregas' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
-
-                  <div class="indicator-card">
+                <div class="indicator-card">
                     <div class="card-header">
                         <i class="bi bi-file-earmark-text"></i>
                         <h3>Lançamentos de Notas Fiscais</h3>
@@ -155,16 +153,14 @@
                         <p>Acompanhamento dos lançamentos de notas fiscais, incluindo indicadores de despesas por filial, correções e registros diários.</p>
                     </div>
                     <div class="card-footer">
-                        <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <span class="status-badge status-completed" style="background-color: #1089c3; color: white;">Liberado</span>
                         <a href="{% url 'dashboard:lancamento' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
-
             </div>
         </div>
 
-
-        
+        <!-- Área de Marketing -->
         <div id="marketing" class="content-area">
             <div class="welcome-bar">
                 <div class="welcome-text">
@@ -172,46 +168,42 @@
                     <p>Monitore e analise os principais KPIs de marketing</p>
                 </div>
                 <div class="date-display">
-                    <i class="bi bi-calendar3"></i> 
+                    <i class="bi bi-calendar3"></i>
                     <span id="current-date-marketing"></span>
                 </div>
             </div>
-            <h2 class="section-title"><i class=""></i></h2>
-
-
+            <h2 class="section-title"></h2>
             <div class="indicators-grid">
-            <div class="indicator-card">
-                <div class="card-header">
-                    <i class="bi bi-instagram"></i>
-                    <h3>Insights Gerais do Instagram</h3>
-                </div>
-                <div class="card-body">
+                <div class="indicator-card">
+                    <div class="card-header">
+                        <i class="bi bi-instagram"></i>
+                        <h3>Insights Gerais do Instagram</h3>
+                    </div>
+                    <div class="card-body">
                         <p>Monitora o desempenho geral da conta do Instagram, incluindo métricas de engajamento, alcance, impressões e crescimento de seguidores</p>
                     </div>
                     <div class="card-footer">
-                        <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <span class="status-badge status-completed" style="background-color: #1089c3; color: white;">Liberado</span>
                         <a href="{% url 'dashboard:insightsinstagram' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
-
-                  <div class="indicator-card">
-                <div class="card-header">
-                    <i class="bi bi-journal"></i>
-                    <h3>Insights Transcamila News</h3>
-                </div>
-                <div class="card-body">
+                <div class="indicator-card">
+                    <div class="card-header">
+                        <i class="bi bi-journal"></i>
+                        <h3>Insights Transcamila News</h3>
+                    </div>
+                    <div class="card-body">
                         <p>Analise o desempenho das postagens do Transcamila News, incluindo alcance, engajamento e interações dos leitores.</p>
                     </div>
                     <div class="card-footer">
-                        <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <span class="status-badge status-completed" style="background-color: #1089c3; color: white;">Liberado</span>
                         <a href="{% url 'dashboard:transcamilanews' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
-
-            </div>   
-            
+            </div>
         </div>
-        
+       
+        <!-- Área de RH -->
         <div id="rh" class="content-area">
             <div class="welcome-bar">
                 <div class="welcome-text">
@@ -219,60 +211,74 @@
                     <p>Monitore e analise os principais KPIs de recursos humanos da Transcamila</p>
                 </div>
                 <div class="date-display">
-                    <i class="bi bi-calendar3"></i> 
+                    <i class="bi bi-calendar3"></i>
                     <span id="current-date-rh"></span>
                 </div>
             </div>
-            <h2 class="section-title"><i class=""></i></h2>
+            <h2 class="section-title"></h2>
             <div class="indicators-grid">
-            <div class="indicator-card">
-                <div class="card-header">
-                    <i class="bi bi-people-fill"></i>
-                    <h3>Rotatividade</h3>
-                </div>
-                <div class="card-body">
+                <div class="indicator-card">
+                    <div class="card-header">
+                        <i class="bi bi-people-fill"></i>
+                        <h3>Rotatividade</h3>
+                    </div>
+                    <div class="card-body">
                         <p>Acompanhamento mensal e anual de admissões, desligamentos e taxa de rotatividade</p>
                     </div>
                     <div class="card-footer">
-                        <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <span class="status-badge status-completed" style="background-color: #1089c3; color: white;">Liberado</span>
                         <a href="{% url 'dashboard:recrutamento' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
-
-               {% if user.is_authenticated and user.is_staff or user.is_superuser %}
+              
+                {% if user.is_authenticated and user.is_staff or user.is_superuser %}
                 <div class="indicator-card">
-                <div class="card-header">
-                <i class="bi bi-person-fill-check"></i>
-                    <h3>Jornada e Frequência</h3>
+                    <div class="card-header">
+                        <i class="bi bi-person-fill-check"></i>
+                        <h3>Jornada e Frequência</h3>
                     </div>
-                        <div class="card-body">
-                         <p>Analise de marcações manuais dos colaboradores</p>
+                    <div class="card-body">
+                        <p>Analise de marcações manuais dos colaboradores</p>
                     </div>
-            <div class="card-footer">
-            <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
-                <a href="{% url 'dashboard:jornada' %}" class="btn btn-primary">Acessar</a>
+                    <div class="card-footer">
+                        <span class="status-badge status-confidential" style="background-color: #F3C550; color: #815800;">Confidencial</span>
+                        <a href="{% url 'dashboard:jornada' %}" class="btn btn-primary">Acessar</a>
+                    </div>
                 </div>
-            </div>
-        {% endif %}
-
+                {% endif %}
+               
                 <div class="indicator-card">
-                <div class="card-header">
-                    <i class="bi bi-people-fill"></i>
-                    <h3>Distribuição da força de trabalho</h3>
-                </div>
-                <div class="card-body">
+                    <div class="card-header">
+                        <i class="bi bi-people-fill"></i>
+                        <h3>Distribuição da força de trabalho</h3>
+                    </div>
+                    <div class="card-body">
                         <p>Análise de colaboradores por idade, sexo e escolaridade, segmentada por filial, cargo e líder responsável</p>
                     </div>
                     <div class="card-footer">
-                         <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <span class="status-badge status-completed" style="background-color: #1089c3; color: white;">Liberado</span>
                         <a href="{% url 'dashboard:força' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
-
-            </div>   
-            
+                {% if user.is_authenticated and user.is_staff or user.is_superuser %}
+                <div class="indicator-card">
+                    <div class="card-header">
+                        <i class="bi bi-people-fill"></i>
+                        <h3>Evolução Salarial (Em breve)</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Acompanhe a variação média dos salários ao longo do tempo, identificando tendências de crescimento, ajustes e períodos de estabilidade na remuneração dos colaboradores.</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="status-badge status-confidential" style="background-color: #F3C550; color: #815800;">Confidencial</span>
+                        <a href="#" class="btn btn-primary">Em breve</a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
         </div>
-        
+       
+        <!-- Área de Financeiro -->
         <div id="financeiro" class="content-area">
             <div class="welcome-bar">
                 <div class="welcome-text">
@@ -280,55 +286,403 @@
                     <p>Monitore e analise os principais KPIs financeiros</p>
                 </div>
                 <div class="date-display">
-                    <i class="bi bi-calendar3"></i> 
+                    <i class="bi bi-calendar3"></i>
                     <span id="current-date-financeiro"></span>
                 </div>
             </div>
-            <h2 class="section-title"><i class=""></i></h2>
+            <h2 class="section-title"></h2>
             <div class="indicators-grid">
-            <div class="indicator-card">
-                <div class="card-header">
-                    <i class="bi bi-file-text"></i>
-                    <h3>Frequencia de status de OPs</h3>
-                </div>
-                <div class="card-body">
+                <div class="indicator-card">
+                    <div class="card-header">
+                        <i class="bi bi-file-text"></i>
+                        <h3>Frequencia de status de OPs</h3>
+                    </div>
+                    <div class="card-body">
                         <p>Frequencia de status de OPs: Finalizadas vs. Não Finalizadas</p>
                     </div>
                     <div class="card-footer">
-                       <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <span class="status-badge status-completed" style="background-color: #1089c3; color: white;">Liberado</span>
                         <a href="{% url 'dashboard:op' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
-
-                  <div class="indicator-card">
-                <div class="card-header">
-                    <i class="bi bi-file-text"></i>
-                    <h3>Conformidade de Guias de ICMS</h3>
-                </div>
-                <div class="card-body">
+                <div class="indicator-card">
+                    <div class="card-header">
+                        <i class="bi bi-file-text"></i>
+                        <h3>Conformidade de Guias de ICMS</h3>
+                    </div>
+                    <div class="card-body">
                         <p>Frequência de guias de ICMS corretas e incorretas</p>
                     </div>
                     <div class="card-footer">
-                       <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <span class="status-badge status-completed" style="background-color: #1089c3; color: white;">Liberado</span>
                         <a href="{% url 'dashboard:icms' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
-
-                  <div class="indicator-card">
-                <div class="card-header">
-                    <i class="bi bi-file-text"></i>
-                    <h3>Pagamentos Sem Lançamento</h3>
-                </div>
-                <div class="card-body">
+                <div class="indicator-card">
+                    <div class="card-header">
+                        <i class="bi bi-file-text"></i>
+                        <h3>Pagamentos Sem Lançamento</h3>
+                    </div>
+                    <div class="card-body">
                         <p>Frequência de pagamentos realizados que não possuem registro correspondente no sistema (Sem lançamento de nota fiscal)</p>
                     </div>
                     <div class="card-footer">
-                       <span class="status-badge status-completed"><i class="bi bi-check-circle"></i> Finalizado</span>
+                        <span class="status-badge status-completed" style="background-color: #1089c3; color: white;">Liberado</span>
                         <a href="{% url 'dashboard:nf' %}" class="btn btn-primary">Acessar</a>
                     </div>
                 </div>
-
-            </div>   
-            
+            </div>
         </div>
+
+    
+        <!-- Área de Saldos Bancários -->
+        <div id="saldos-bancarios" class="content-area">
+            <div class="dashboard" style="padding: 20px; background: #f5f7fa; border-radius: 12px; margin-top: 20px;">
+                <div class="header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                    <h1 style="font-weight: 600; margin: 0;">Saldos bancários</h1>
+                    <div class="date" id="current-time" style="background: #148ec4; color: white; padding: 8px 15px; border-radius: 20px; font-size: 14px;">Carregando...</div>
+                </div>
+                <div class="summary-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                    <div class="card highlight" style="background: linear-gradient(135deg, #1b5e99, #148ec4); color: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <div class="card-title" style="font-size: 14px; color: rgba(255,255,255,.8);">SALDO BANCO</div>
+                        <div class="card-value" id="saldo" style="font-size: 24px; font-weight: 700; margin: 8px 0; color: white;">R$ 0,00</div>
+                        <div class="card-description" style="font-size: 12px; color: rgba(255,255,255,.8);">Saldo total em contas</div>
+                    </div>
+                    <div class="card" style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <div class="card-title" style="font-size: 14px; color: #95a5a6;">LIMITE</div>
+                        <div class="card-value" id="limite" style="font-size: 24px; font-weight: 700; margin: 8px 0; color: #2c3e50;">R$ 0,00</div>
+                        <div class="card-description" style="font-size: 12px; color: #95a5a6;">Limite de crédito disponível</div>
+                    </div>
+                    <div class="card" style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <div class="card-title" style="font-size: 14px; color: #95a5a6;">TOTAL EM APLICAÇÃO</div>
+                        <div class="card-value" id="cheque" style="font-size: 24px; font-weight: 700; margin: 8px 0; color: #2c3e50;">R$ 0,00</div>
+                        <div class="card-description" style="font-size: 12px; color: #95a5a6;">Aplicações</div>
+                    </div>
+                    <div class="card" style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <div class="card-title" style="font-size: 14px; color: #95a5a6;">DISPONÍVEL</div>
+                        <div class="card-value" id="disponivel" style="font-size: 24px; font-weight: 700; margin: 8px 0; color: #2c3e50;">R$ 0,00</div>
+                        <div class="card-description" style="font-size: 12px; color: #95a5a6;">Valor total disponível</div>
+                    </div>
+                </div>
+                <h2 style="margin: 30px 0 20px;">Contas Correntes</h2>
+                <div class="bank-accounts" id="banks" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(600px, 1fr)); gap: 20px;"></div>
+                <div class="status" id="status" style="text-align: right; font-size: 12px; margin-top: 10px;"><span class="loading" style="color: #148ec4;">Carregando dados...</span></div>
+            </div>
+
+            <!-- SCRIPT DO SALDOS (mantido) -->
+            <script>
+                (function() {
+                    const SHEET_ID = '1t_6NFKIgGSIB9qLp3s4ikXcKS8MgV37aiylYSzfjVmo';
+                    const GID = '0';
+                    let lastData = null;
+                    const bankLogos = {
+                        'Itaú': 'https://res.cloudinary.com/dnmppxebg/image/upload/v1761795926/Ita%C3%BA_hdct8j.png',
+                        'Santander': 'https://res.cloudinary.com/dnmppxebg/image/upload/v1761795925/santander_opahkg.jpg',
+                        'Bradesco': 'https://res.cloudinary.com/dnmppxebg/image/upload/v1761795925/Bradesco_oeunlq.jpg',
+                        'Banco do Brasil': 'https://res.cloudinary.com/dnmppxebg/image/upload/v1761795925/Banco_do_Brasil_ypj3hp.jpg',
+                        'Banco Daycoval': 'https://res.cloudinary.com/dnmppxebg/image/upload/v1761795925/Daycoval_lw8821.png'
+                    };
+                    const fallbackSvg = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsbD0iI2RkZCIgcng9IjEwIi8+PHRleHQgeD0iNTAlIiB5PSI1NSUiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IiM5OTkiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPj88L3RleHQ+PC9zdmc+';
+
+                    function format(v) {
+                        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0);
+                    }
+
+                    function parseCurrency(cell) {
+                        if (!cell) return 0;
+                        if (typeof cell.v === 'number') return cell.v;
+                        let str = cell.f && typeof cell.f === 'string' ? cell.f : (typeof cell.v === 'string' ? cell.v : '');
+                        return parseFloat(str.replace(/R\$\s?/g, '').replace(/\./g, '').replace(',', '.')) || 0;
+                    }
+
+                    function getYesterday() {
+                        const d = new Date();
+                        d.setDate(d.getDate() - 1);
+                        return d.toLocaleDateString('pt-BR');
+                    }
+
+                    async function loadData() {
+                        const status = document.getElementById('status');
+                        status.innerHTML = '<span class="loading" style="color: #148ec4;">Carregando...</span>';
+                        try {
+                            const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${GID}&t=${Date.now()}`;
+                            const response = await fetch(url);
+                            if (!response.ok) throw new Error('Falha na rede');
+                            const text = await response.text();
+                            const jsonText = text.substring(47, text.length - 2);
+                            const json = JSON.parse(jsonText);
+                            const rows = json.table.rows;
+
+                            const data = { banks: {}, total: { s: 0, l: 0, c: 0, d: 0, aplic: 0 } };
+                            let currentBank = null;
+
+                            for (let i = 0; i < rows.length; i++) {
+                                const row = rows[i];
+                                if (!row.c || !row.c[0]) continue;
+                                const cellA = row.c[0].v?.toString().trim();
+                                if (!cellA || cellA === getYesterday() || cellA === 'TOTAL') continue;
+
+                                if (!cellA.match(/C[\/\\]C/i)) {
+                                    currentBank = cellA;
+                                    if (!data.banks[currentBank]) data.banks[currentBank] = { acc: [], tot: { s: 0, l: 0, c: 0, d: 0, aplic: 0 } };
+                                    continue;
+                                }
+
+                                let contaRaw = cellA.replace(/^C[\/\\]C\s*n?[°º]?\s*[:\-]?\s*/gi, '').trim();
+                                contaRaw = contaRaw.replace(/-\s*\(\s*APLIC\s*\)$/i, ' (APLIC)');
+
+                                const s = parseCurrency(row.c[1]);
+                                const l = parseCurrency(row.c[2]);
+                                const c = row.c[3] ? parseCurrency(row.c[3]) : 0;
+                                const d = parseCurrency(row.c[4]) || (s + l - c);
+
+                                const isAplic = /\(APLIC\)$/i.test(contaRaw);
+                                const conta = contaRaw;
+
+                                const acc = { conta, s, l, c, d, isAplic };
+                                data.banks[currentBank].acc.push(acc);
+
+                                if (isAplic) {
+                                    data.banks[currentBank].tot.aplic += s;
+                                    data.total.aplic += s;
+                                } else {
+                                    data.banks[currentBank].tot.s += s;
+                                    data.total.s += s;
+                                }
+
+                                data.banks[currentBank].tot.l += l;
+                                data.banks[currentBank].tot.c += c;
+                                data.banks[currentBank].tot.d += d;
+
+                                data.total.l += l;
+                                data.total.c += c;
+                                data.total.d += d;
+                            }
+
+                            if (Object.keys(data.banks).length === 0) throw new Error('Nenhum dado');
+                            lastData = data;
+                            render(data);
+                            status.textContent = `Atualizado: ${new Date().toLocaleTimeString('pt-BR')}`;
+                        } catch (err) {
+                            console.error('Erro:', err);
+                            status.innerHTML = `<span class="error" style="color: #e74c3c;">Erro: ${err.message}</span>`;
+                            if (lastData) {
+                                render(lastData);
+                                status.innerHTML += ' <small>(dados antigos)</small>';
+                            }
+                        }
+                    }
+
+                    function render(data) {
+                        document.getElementById('current-time').textContent = getYesterday();
+                        document.getElementById('saldo').textContent = format(data.total.s);
+                        document.getElementById('limite').textContent = format(data.total.l);
+                        document.getElementById('cheque').textContent = format(data.total.aplic);
+                        document.getElementById('disponivel').textContent = format(data.total.s + data.total.aplic + data.total.l - data.total.c);
+
+                        const container = document.getElementById('banks');
+                        container.innerHTML = '';
+                        const order = ['Itaú', 'Santander', 'Bradesco', 'Banco do Brasil', 'Banco Daycoval'];
+
+                        order.forEach(name => {
+                            const bank = data.banks[name];
+                            if (!bank || bank.acc.length === 0) return;
+                            const logo = bankLogos[name] || fallbackSvg;
+
+                            let html = `
+                            <div class="bank-card" style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow-x: auto;">
+                                <div class="bank-header" style="display: flex; align-items: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0;">
+                                    <div class="bank-logo" style="width: 40px; height: 40px; margin-right: 12px; background: #eee; border-radius: 8px; overflow: hidden;">
+                                        <img src="${logo}" alt="${name}" onerror="this.src='${fallbackSvg}';" style="width: 100%; height: 100%; object-fit: contain;">
+                                    </div>
+                                    <div class="bank-name" style="font-weight: 600; font-size: 18px;">${name}</div>
+                                </div>
+                                <table class="account-table" style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-align: left; padding: 10px 8px; font-size: 12px; color: #95a5a6; background: #f8f9fa; border-bottom: 1px solid #e0e0e0;">CONTA</th>
+                                            <th style="text-align: left; padding: 10px 8px; font-size: 12px; color: #95a5a6; background: #f8f9fa; border-bottom: 1px solid #e0e0e0;">SALDO</th>
+                                            <th style="text-align: left; padding: 10px 8px; font-size: 12px; color: #95a5a6; background: #f8f9fa; border-bottom: 1px solid #e0e0e0;">LIMITE</th>
+                                            <th style="text-align: left; padding: 10px 8px; font-size: 12px; color: #95a5a6; background: #f8f9fa; border-bottom: 1px solid #e0e0e0;">DISPONÍVEL</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>`;
+
+                            bank.acc.forEach(acc => {
+                                const saldoStyle = acc.isAplic 
+                                    ? `<span style="color: #27ae60; font-weight: 600;">${format(acc.s)} </span>` 
+                                    : format(acc.s);
+                                html += `
+                                    <tr>
+                                        <td style="padding: 12px 8px; border-bottom: 1px solid #f5f5f5; font-size: 14px; white-space: nowrap;">${acc.conta}</td>
+                                        <td style="padding: 12px 8px; border-bottom: 1px solid #f5f5f5; font-size: 14px; font-weight: 600; color: #2c3e50;">${saldoStyle}</td>
+                                        <td style="padding: 12px 8px; border-bottom: 1px solid #f5f5f5; font-size: 14px; font-weight: 600; color: #2c3e50;">${format(acc.l)}</td>
+                                        <td style="padding: 12px 8px; border-bottom: 1px solid #f5f5f5; font-size: 14px; font-weight: 600; color: #2c3e50;">${format(acc.d)}</td>
+                                    </tr>`;
+                            });
+
+                            const totalSaldo = bank.tot.s + bank.tot.aplic;
+                            html += `
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td style="font-weight:700; padding: 12px 8px; background: #f1f5f9; border-top: 2px solid #148ec4; color: #2c3e50;">TOTAL</td>
+                                            <td style="padding: 12px 8px; background: #f1f5f9; border-top: 2px solid #148ec4; color: #2c3e50;">${format(totalSaldo)}</td>
+                                            <td style="padding: 12px 8px; background: #f1f5f9; border-top: 2px solid #148ec4; color: #2c3e50;">${format(bank.tot.l)}</td>
+                                            <td style="padding: 12px 8px; background: #f1f5f9; border-top: 2px solid #148ec4; color: #2c3e50;">${format(bank.tot.d)}</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>`;
+                            container.innerHTML += html;
+                        });
+                    }
+
+                    setInterval(loadData, 15000);
+                    loadData();
+                })();
+            </script>
+        </div>
+
+        <!-- DASHBOARD DE CTEs (ABRE DIRETO) -->
+        <div id="dashboard-ctes" class="content-area">
+            <div class="dashboard" style="padding: 20px; background: #f5f7fa; border-radius: 12px; margin-top: 20px;">
+                <div class="header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
+                    <h1 style="font-weight: 600; margin: 0;">Dashboard de CTEs</h1>
+                    <div class="date" id="ctes-current-time" style="background: #148ec4; color: white; padding: 8px 15px; border-radius: 20px; font-size: 14px;">Carregando...</div>
+                </div>
+
+                <div class="summary-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                    <div class="card highlight" style="background: linear-gradient(135deg, #1b5e99, #148ec4); color: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <div class="card-title" style="font-size: 14px; color: rgba(255,255,255,.8);">TOTAL EMITIDOS</div>
+                        <div class="card-value" id="total-ctes" style="font-size: 24px; font-weight: 700; margin: 8px 0;">0</div>
+                        <div class="card-description" style="font-size: 12px; color: rgba(255,255,255,.8);">CTEs emitidos hoje</div>
+                    </div>
+                    <div class="card" style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <div class="card-title" style="font-size: 14px; color: #95a5a6;">VALOR TOTAL FRETE</div>
+                        <div class="card-value" id="valor-frete" style="font-size: 24px; font-weight: 700; margin: 8px 0; color: #2c3e50;">R$ 0,00</div>
+                        <div class="card-description" style="font-size: 12px; color: #95a5a6;">Soma do valor_frete</div>
+                    </div>
+                    <div class="card" style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <div class="card-title" style="font-size: 14px; color: #95a5a6;">MÉDIA POR CTE</div>
+                        <div class="card-value" id="media-frete" style="font-size: 24px; font-weight: 700; margin: 8px 0; color: #2c3e50;">R$ 0,00</div>
+                        <div class="card-description" style="font-size: 12px; color: #95a5a6;">Frete médio</div>
+                    </div>
+                    <div class="card" style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                        <div class="card-title" style="font-size: 14px; color: #95a5a6;">VOLUME TOTAL</div>
+                        <div class="card-value" id="total-peso" style="font-size: 24px; font-weight: 700; margin: 8px 0; color: #2c3e50;">0 kg</div>
+                        <div class="card-description" style="font-size: 12px; color: #95a5a6;">Peso total transportado</div>
+                    </div>
+                </div>
+
+                <h2 style="margin: 30px 0 20px;">Últimos CTEs Emitidos</h2>
+                <div class="table-container" style="background: white; border-radius: 10px; padding: 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden;">
+                    <table class="table" id="ctes-table" style="width: 100%; border-collapse: collapse;">
+                        <thead style="background: #f8f9fa;">
+                            <tr>
+                                <th style="text-align: left; padding: 12px 15px; font-size: 13px; color: #95a5a6; border-bottom: 1px solid #e0e0e0;">Nº CTE</th>
+                                <th style="text-align: left; padding: 12px 15px; font-size: 13px; color: #95a5a6; border-bottom: 1px solid #e0e0e0;">ORIGEM → DESTINO</th>
+                                <th style="text-align: left; padding: 12px 15px; font-size: 13px; color: #95a5a6; border-bottom: 1px solid #e0e0e0;">TOMADOR</th>
+                                <th style="text-align: right; padding: 12px 15px; font-size: 13px; color: #95a5a6; border-bottom: 1px solid #e0e0e0;">FRETE</th>
+                                <th style="text-align: center; padding: 12px 15px; font-size: 13px; color: #95a5a6; border-bottom: 1px solid #e0e0e0;">EMISSÃO</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ctes-tbody"></tbody>
+                    </table>
+                </div>
+
+                <div class="status" id="ctes-status" style="text-align: right; font-size: 12px; margin-top: 10px;">
+                    <span class="loading" style="color: #148ec4;">Carregando dados...</span>
+                </div>
+            </div>
+
+            <script>
+                (function() {
+                    const API_URL = "{% url 'dashboard:api_ctes_dashboard' %}";
+                    let lastData = null;
+
+                    function formatCurrency(v) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0); }
+                    function formatDate(d) { return new Date(d).toLocaleString('pt-BR', { hour: '2-digit', minute: '2-digit' }); }
+                    function formatWeight(kg) { return `${(kg || 0).toLocaleString('pt-BR')} kg`; }
+
+                    async function load() {
+                        const status = document.getElementById('ctes-status');
+                        status.innerHTML = '<span class="loading" style="color: #148ec4;">Carregando...</span>';
+                        try {
+                            const res = await fetch(API_URL);
+                            if (!res.ok) throw new Error('Falha na rede');
+                            const data = await res.json();
+
+                            document.getElementById('total-ctes').textContent = data.total || 0;
+                            document.getElementById('valor-frete').textContent = formatCurrency(data.valor_total);
+                            document.getElementById('media-frete').textContent = formatCurrency(data.media_frete);
+                            document.getElementById('total-peso').textContent = formatWeight(data.peso_total);
+
+                            const tbody = document.getElementById('ctes-tbody');
+                            tbody.innerHTML = '';
+                            data.ultimos_ctes.forEach(cte => {
+                                tbody.innerHTML += `
+                                    <tr style="border-bottom: 1px solid #f5f5f5;">
+                                        <td style="padding: 12px 15px; font-family: monospace; font-weight: 600;">${cte.numero_cte}</td>
+                                        <td style="padding: 12px 15px; white-space: nowrap;">${cte.origem_destino}</td>
+                                        <td style="padding: 12px 15px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${cte.tomador_info}">${cte.tomador_info}</td>
+                                        <td style="padding: 12px 15px; text-align: right; font-weight: 600; color: #2c3e50;">${formatCurrency(cte.valor_frete)}</td>
+                                        <td style="padding: 12px 15px; text-align: center; font-size: 12px; color: #7f8c8d;">${formatDate(cte.data_emissao)}</td>
+                                    </tr>`;
+                            });
+
+                            document.getElementById('ctes-current-time').textContent = new Date().toLocaleDateString('pt-BR');
+                            status.textContent = `Atualizado: ${new Date().toLocaleTimeString('pt-BR')}`;
+                            lastData = data;
+                        } catch (err) {
+                            status.innerHTML = `<span class="error" style="color: #e74c3c;">Erro: ${err.message}</span>`;
+                            if (lastData) {
+                                render(lastData);
+                                status.innerHTML += ' <small>(dados antigos)</small>';
+                            }
+                        }
+                    }
+
+                    function render(data) {
+                        document.getElementById('total-ctes').textContent = data.total || 0;
+                        document.getElementById('valor-frete').textContent = formatCurrency(data.valor_total);
+                        document.getElementById('media-frete').textContent = formatCurrency(data.media_frete);
+                        document.getElementById('total-peso').textContent = formatWeight(data.peso_total);
+                        const tbody = document.getElementById('ctes-tbody');
+                        tbody.innerHTML = '';
+                        data.ultimos_ctes.forEach(cte => {
+                            tbody.innerHTML += `
+                                <tr style="border-bottom: 1px solid #f5f5f5;">
+                                    <td style="padding: 12px 15px; font-family: monospace; font-weight: 600;">${cte.numero_cte}</td>
+                                    <td style="padding: 12px 15px; white-space: nowrap;">${cte.origem_destino}</td>
+                                    <td style="padding: 12px 15px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${cte.tomador_info}">${cte.tomador_info}</td>
+                                    <td style="padding: 12px 15px; text-align: right; font-weight: 600; color: #2c3e50;">${formatCurrency(cte.valor_frete)}</td>
+                                    <td style="padding: 12px 15px; text-align: center; font-size: 12px; color: #7f8c8d;">${formatDate(cte.data_emissao)}</td>
+                                </tr>`;
+                        });
+                    }
+
+                    setInterval(load, 30000);
+                    load();
+                })();
+            </script>
+        </div>
+    </div>
+</div>
+
+<!-- Navegação dinâmica -->
+<script>
+function showContent(id) {
+    document.querySelectorAll('.content-area').forEach(area => area.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.nav-submenu .nav-link').forEach(link => link.classList.remove('active'));
+    const link = document.querySelector(`.nav-submenu .nav-link[onclick="showContent('${id}')"]`);
+    if (link) link.classList.add('active');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const now = new Date().toLocaleDateString('pt-BR');
+    document.querySelectorAll('[id^="current-date"]').forEach(el => el.textContent = now);
+});
+</script>
 {% endblock %}
