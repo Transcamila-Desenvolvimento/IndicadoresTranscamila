@@ -25,8 +25,7 @@
                         {% if user.is_authenticated and user.is_staff or user.is_superuser %}
                         <li><a href="#" class="nav-link" onclick="showContent('saldos-bancarios')"><i class="bi bi-currency-dollar"></i> Saldos Bancários</a></li>
                         {% endif %}
-                        <!-- DASHBOARD CTEs DIRETO -->
-                        {% if user.is_authenticated and user.is_staff or user.is_superuser %}
+                        {% if user.is_authenticated and user.username == 'miguel.ribeiro' %}
                         <li><a href="#" class="nav-link" onclick="showContent('dashboard-ctes')"><i class="bi bi-truck"></i> CT-es emitidos</a></li>
                         {% endif %}
                     </ul>
@@ -59,6 +58,7 @@
 
     <!-- Conteúdo principal -->
     <div class="main-content">
+
         <!-- Área de Faturamento -->
         <div id="faturamento" class="content-area active">
             <div class="welcome-bar">
@@ -334,7 +334,6 @@
             </div>
         </div>
 
-    
         <!-- Área de Saldos Bancários -->
         <div id="saldos-bancarios" class="content-area">
             <div class="dashboard" style="padding: 20px; background: #f5f7fa; border-radius: 12px; margin-top: 20px;">
@@ -369,7 +368,7 @@
                 <div class="status" id="status" style="text-align: right; font-size: 12px; margin-top: 10px;"><span class="loading" style="color: #148ec4;">Carregando dados...</span></div>
             </div>
 
-            <!-- SCRIPT DO SALDOS (mantido) -->
+            <!-- SCRIPT DO SALDOS -->
             <script>
                 (function() {
                     const SHEET_ID = '1t_6NFKIgGSIB9qLp3s4ikXcKS8MgV37aiylYSzfjVmo';
@@ -544,145 +543,591 @@
             </script>
         </div>
 
-        <!-- DASHBOARD DE CTEs (ABRE DIRETO) -->
+        <!-- DASHBOARD DE CTEs (COM ABAS SIMPLES SEM BOOTSTRAP) -->
         <div id="dashboard-ctes" class="content-area">
-            <div class="dashboard" style="padding: 20px; background: #f5f7fa; border-radius: 12px; margin-top: 20px;">
-                <div class="header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid #e0e0e0;">
-                    <h1 style="font-weight: 600; margin: 0;">Dashboard de CTEs</h1>
-                    <div class="date" id="ctes-current-time" style="background: #148ec4; color: white; padding: 8px 15px; border-radius: 20px; font-size: 14px;">Carregando...</div>
-                </div>
-
-                <div class="summary-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px;">
-                    <div class="card highlight" style="background: linear-gradient(135deg, #1b5e99, #148ec4); color: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                        <div class="card-title" style="font-size: 14px; color: rgba(255,255,255,.8);">TOTAL EMITIDOS</div>
-                        <div class="card-value" id="total-ctes" style="font-size: 24px; font-weight: 700; margin: 8px 0;">0</div>
-                        <div class="card-description" style="font-size: 12px; color: rgba(255,255,255,.8);">CTEs emitidos hoje</div>
-                    </div>
-                    <div class="card" style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                        <div class="card-title" style="font-size: 14px; color: #95a5a6;">VALOR TOTAL FRETE</div>
-                        <div class="card-value" id="valor-frete" style="font-size: 24px; font-weight: 700; margin: 8px 0; color: #2c3e50;">R$ 0,00</div>
-                        <div class="card-description" style="font-size: 12px; color: #95a5a6;">Soma do valor_frete</div>
-                    </div>
-                    <div class="card" style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                        <div class="card-title" style="font-size: 14px; color: #95a5a6;">MÉDIA POR CTE</div>
-                        <div class="card-value" id="media-frete" style="font-size: 24px; font-weight: 700; margin: 8px 0; color: #2c3e50;">R$ 0,00</div>
-                        <div class="card-description" style="font-size: 12px; color: #95a5a6;">Frete médio</div>
-                    </div>
-                    <div class="card" style="background: white; border-radius: 10px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                        <div class="card-title" style="font-size: 14px; color: #95a5a6;">VOLUME TOTAL</div>
-                        <div class="card-value" id="total-peso" style="font-size: 24px; font-weight: 700; margin: 8px 0; color: #2c3e50;">0 kg</div>
-                        <div class="card-description" style="font-size: 12px; color: #95a5a6;">Peso total transportado</div>
+            <div class="p-4">
+                <!-- Cabeçalho -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="section-title mb-0">Dashboard de CTEs</h2>
+                    <div class="date-display">
+                        <i class="bi bi-calendar3 me-2"></i>
+                        <span id="ctes-current-time">Carregando...</span>
                     </div>
                 </div>
 
-                <h2 style="margin: 30px 0 20px;">Últimos CTEs Emitidos</h2>
-                <div class="table-container" style="background: white; border-radius: 10px; padding: 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden;">
-                    <table class="table" id="ctes-table" style="width: 100%; border-collapse: collapse;">
-                        <thead style="background: #f8f9fa;">
-                            <tr>
-                                <th style="text-align: left; padding: 12px 15px; font-size: 13px; color: #95a5a6; border-bottom: 1px solid #e0e0e0;">Nº CTE</th>
-                                <th style="text-align: left; padding: 12px 15px; font-size: 13px; color: #95a5a6; border-bottom: 1px solid #e0e0e0;">ORIGEM → DESTINO</th>
-                                <th style="text-align: left; padding: 12px 15px; font-size: 13px; color: #95a5a6; border-bottom: 1px solid #e0e0e0;">TOMADOR</th>
-                                <th style="text-align: right; padding: 12px 15px; font-size: 13px; color: #95a5a6; border-bottom: 1px solid #e0e0e0;">FRETE</th>
-                                <th style="text-align: center; padding: 12px 15px; font-size: 13px; color: #95a5a6; border-bottom: 1px solid #e0e0e0;">EMISSÃO</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ctes-tbody"></tbody>
-                    </table>
+                <!-- FILTROS -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <form id="form-filtros" class="row g-3 align-items-end">
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold text-muted">Ano</label>
+                                <select class="form-select form-select-sm" id="filter-ano"></select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold text-muted">Mês</label>
+                                <select class="form-select form-select-sm" id="filter-mes">
+                                    <option value="">Todos</option>
+                                    <option value="1">Janeiro</option>
+                                    <option value="2">Fevereiro</option>
+                                    <option value="3">Março</option>
+                                    <option value="4">Abril</option>
+                                    <option value="5">Maio</option>
+                                    <option value="6">Junho</option>
+                                    <option value="7">Julho</option>
+                                    <option value="8">Agosto</option>
+                                    <option value="9">Setembro</option>
+                                    <option value="10">Outubro</option>
+                                    <option value="11">Novembro</option>
+                                    <option value="12">Dezembro</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold text-muted">Dia</label>
+                                <input type="date" class="form-control form-control-sm" id="filter-dia">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold text-muted">Período</label>
+                                <input type="text" class="form-control form-control-sm" id="filter-periodo" placeholder="01/03 - 10/03">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold text-muted">Operação</label>
+                                <select class="form-select form-select-sm" id="filter-operacao">
+                                    <option value="">Todas</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold text-muted">Tomador</label>
+                                <select class="form-select form-select-sm" id="filter-tomador">
+                                    <option value="">Todos</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label fw-bold text-muted">Granularidade</label>
+                                <select class="form-select form-select-sm" id="granularidade">
+                                    <option value="dia">Dia</option>
+                                    <option value="semana">Semana</option>
+                                    <option value="mes">Mês</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-primary w-100" id="aplicar-filtros">
+                                    <i class="bi bi-funnel me-1"></i> Filtrar
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
-                <div class="status" id="ctes-status" style="text-align: right; font-size: 12px; margin-top: 10px;">
-                    <span class="loading" style="color: #148ec4;">Carregando dados...</span>
+                <!-- BOTÕES PERSONALIZADOS PARA ABAS (SEM BOOTSTRAP) -->
+                <div class="custom-tabs mb-4">
+                    <button class="tab-btn active" data-tab="aba-visao-geral">
+                        <i class="bi bi-graph-up"></i> Visão Geral
+                    </button>
+                    <button class="tab-btn" data-tab="aba-composicao">
+                        <i class="bi bi-pie-chart"></i> Composição
+                    </button>
+                    <button class="tab-btn" data-tab="aba-analitico">
+                        <i class="bi bi-table"></i> Analítico
+                    </button>
+                </div>
+
+                <!-- CONTEÚDO DAS ABAS -->
+                <div class="tab-content">
+                    <!-- ABA 1: VISÃO GERAL -->
+                    <div class="tab-pane active" id="aba-visao-geral">
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-3">
+                                <div class="indicator-card">
+                                    <div class="card-header" style="background: var(--gradient-primary);">
+                                        <i class="bi bi-file-text"></i>
+                                        <h3>CTEs Emitidos</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <h2 class="mb-0" id="card-ctes">0</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="indicator-card">
+                                    <div class="card-header" style="background: var(--gradient-secondary);">
+                                        <i class="bi bi-currency-dollar"></i>
+                                        <h3>Valor Faturado</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <h2 class="mb-0" id="card-valor">R$ 0,00</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="indicator-card">
+                                    <div class="card-header" style="background: linear-gradient(135deg, #FF9800, #F57C00);">
+                                        <i class="bi bi-box"></i>
+                                        <h3>Volume</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <h2 class="mb-0" id="card-volume">0</h2>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="indicator-card">
+                                    <div class="card-header" style="background: linear-gradient(135deg, #9C27B0, #7B1FA2);">
+                                        <i class="bi bi-truck"></i>
+                                        <h3>Peso</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <h2 class="mb-0" id="card-peso">0 kg</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Valor Faturado e CTEs por Período</h5>
+                                <canvas id="chart-visao-geral" height="100"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Últimos CTEs Emitidos</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle" id="tabela-ultimos-ctes">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Nº CTE</th>
+                                                <th>Origem → Destino</th>
+                                                <th>Tomador</th>
+                                                <th class="text-end">Frete</th>
+                                                <th class="text-center">Emissão</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ABA 2: COMPOSIÇÃO -->
+                    <div class="tab-pane" id="aba-composicao">
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-2">
+                                <div class="indicator-card">
+                                    <div class="card-header text-white" style="background: #1089c3;">
+                                        <i class="bi bi-cash"></i>
+                                        <h3>Valor Total</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <h4 class="mb-0" id="comp-valor-faturado">R$ 0,00</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="indicator-card">
+                                    <div class="card-header text-white" style="background: #26A69A;">
+                                        <i class="bi bi-truck"></i>
+                                        <h3>Frete Peso</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <h4 class="mb-0" id="comp-frete-peso">R$ 0,00</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="indicator-card">
+                                    <div class="card-header text-white" style="background: #FF9800;">
+                                        <i class="bi bi-shield"></i>
+                                        <h3>Ad Valorem</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <h4 class="mb-0" id="comp-advalorem">R$ 0,00</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="indicator-card">
+                                    <div class="card-header text-white" style="background: #F44336;">
+                                        <i class="bi bi-exclamation-triangle"></i>
+                                        <h3>GRIS</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <h4 class="mb-0" id="comp-gris">R$ 0,00</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="indicator-card">
+                                    <div class="card-header text-white" style="background: #9C27B0;">
+                                        <i class="bi bi-file-earmark-text"></i>
+                                        <h3>ICMS</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <h4 class="mb-0" id="comp-icms">R$ 0,00</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="indicator-card">
+                                    <div class="card-header text-white" style="background: #607D8B;">
+                                        <i class="bi bi-signpost"></i>
+                                        <h3>Pedágio</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <h4 class="mb-0" id="comp-pedagio">R$ 0,00</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">Composição do Frete</h5>
+                                <canvas id="chart-composicao" height="120"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ABA 3: ANALÍTICO -->
+                    <div class="tab-pane" id="aba-analitico">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="card border-0 shadow-sm h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Por Operação</h5>
+                                        <canvas id="chart-por-operacao"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card border-0 shadow-sm h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Por Tomador</h5>
+                                        <canvas id="chart-por-tomador"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card border-0 shadow-sm mt-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Resumo Analítico</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover" id="tabela-analitico">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Tipo</th>
+                                                <th>Grupo</th>
+                                                <th>CTEs</th>
+                                                <th>Valor</th>
+                                                <th>Peso</th>
+                                                <th>Volume</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3 text-end">
+                    <small class="text-muted" id="ctes-status">Carregando dados...</small>
                 </div>
             </div>
-
-            <script>
-                (function() {
-                    const API_URL = "{% url 'dashboard:api_ctes_dashboard' %}";
-                    let lastData = null;
-
-                    function formatCurrency(v) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0); }
-                    function formatDate(d) { return new Date(d).toLocaleString('pt-BR', { hour: '2-digit', minute: '2-digit' }); }
-                    function formatWeight(kg) { return `${(kg || 0).toLocaleString('pt-BR')} kg`; }
-
-                    async function load() {
-                        const status = document.getElementById('ctes-status');
-                        status.innerHTML = '<span class="loading" style="color: #148ec4;">Carregando...</span>';
-                        try {
-                            const res = await fetch(API_URL);
-                            if (!res.ok) throw new Error('Falha na rede');
-                            const data = await res.json();
-
-                            document.getElementById('total-ctes').textContent = data.total || 0;
-                            document.getElementById('valor-frete').textContent = formatCurrency(data.valor_total);
-                            document.getElementById('media-frete').textContent = formatCurrency(data.media_frete);
-                            document.getElementById('total-peso').textContent = formatWeight(data.peso_total);
-
-                            const tbody = document.getElementById('ctes-tbody');
-                            tbody.innerHTML = '';
-                            data.ultimos_ctes.forEach(cte => {
-                                tbody.innerHTML += `
-                                    <tr style="border-bottom: 1px solid #f5f5f5;">
-                                        <td style="padding: 12px 15px; font-family: monospace; font-weight: 600;">${cte.numero_cte}</td>
-                                        <td style="padding: 12px 15px; white-space: nowrap;">${cte.origem_destino}</td>
-                                        <td style="padding: 12px 15px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${cte.tomador_info}">${cte.tomador_info}</td>
-                                        <td style="padding: 12px 15px; text-align: right; font-weight: 600; color: #2c3e50;">${formatCurrency(cte.valor_frete)}</td>
-                                        <td style="padding: 12px 15px; text-align: center; font-size: 12px; color: #7f8c8d;">${formatDate(cte.data_emissao)}</td>
-                                    </tr>`;
-                            });
-
-                            document.getElementById('ctes-current-time').textContent = new Date().toLocaleDateString('pt-BR');
-                            status.textContent = `Atualizado: ${new Date().toLocaleTimeString('pt-BR')}`;
-                            lastData = data;
-                        } catch (err) {
-                            status.innerHTML = `<span class="error" style="color: #e74c3c;">Erro: ${err.message}</span>`;
-                            if (lastData) {
-                                render(lastData);
-                                status.innerHTML += ' <small>(dados antigos)</small>';
-                            }
-                        }
-                    }
-
-                    function render(data) {
-                        document.getElementById('total-ctes').textContent = data.total || 0;
-                        document.getElementById('valor-frete').textContent = formatCurrency(data.valor_total);
-                        document.getElementById('media-frete').textContent = formatCurrency(data.media_frete);
-                        document.getElementById('total-peso').textContent = formatWeight(data.peso_total);
-                        const tbody = document.getElementById('ctes-tbody');
-                        tbody.innerHTML = '';
-                        data.ultimos_ctes.forEach(cte => {
-                            tbody.innerHTML += `
-                                <tr style="border-bottom: 1px solid #f5f5f5;">
-                                    <td style="padding: 12px 15px; font-family: monospace; font-weight: 600;">${cte.numero_cte}</td>
-                                    <td style="padding: 12px 15px; white-space: nowrap;">${cte.origem_destino}</td>
-                                    <td style="padding: 12px 15px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${cte.tomador_info}">${cte.tomador_info}</td>
-                                    <td style="padding: 12px 15px; text-align: right; font-weight: 600; color: #2c3e50;">${formatCurrency(cte.valor_frete)}</td>
-                                    <td style="padding: 12px 15px; text-align: center; font-size: 12px; color: #7f8c8d;">${formatDate(cte.data_emissao)}</td>
-                                </tr>`;
-                        });
-                    }
-
-                    setInterval(load, 30000);
-                    load();
-                })();
-            </script>
         </div>
     </div>
 </div>
 
-<!-- Navegação dinâmica -->
-<script>
-function showContent(id) {
-    document.querySelectorAll('.content-area').forEach(area => area.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    document.querySelectorAll('.nav-submenu .nav-link').forEach(link => link.classList.remove('active'));
-    const link = document.querySelector(`.nav-submenu .nav-link[onclick="showContent('${id}')"]`);
-    if (link) link.classList.add('active');
+<!-- ESTILOS DAS ABAS PERSONALIZADAS -->
+<style>
+.custom-tabs {
+    display: flex;
+    gap: 8px;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const now = new Date().toLocaleDateString('pt-BR');
-    document.querySelectorAll('[id^="current-date"]').forEach(el => el.textContent = now);
-});
+.tab-btn {
+    background: none;
+    border: none;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #6c757d;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.tab-btn:hover {
+    color: #1089c3;
+}
+
+.tab-btn.active {
+    color: #1089c3;
+    border-bottom-color: #1089c3;
+    font-weight: 600;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+</style>
+
+<!-- Chart.js + Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/luxon@3"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon"></script>
+
+<script>
+    // === SISTEMA DE ABAS SEM BOOTSTRAP ===
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = btn.getAttribute('data-tab');
+
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+            btn.classList.add('active');
+            const pane = document.getElementById(target);
+            if (pane) pane.classList.add('active');
+        });
+    });
+
+    // === SCRIPT DO DASHBOARD DE CTEs ===
+    (function () {
+        const API_URL = "{% url 'dashboard:api_ctes_dashboard' %}".replace(/\/$/, '');
+        let charts = {};
+
+        const filtros = {
+            ano: new Date().getFullYear(),
+            mes: new Date().getMonth() + 1,
+            dia: '',
+            periodo: '',
+            operacao: '',
+            tomador: '',
+            granularidade: 'dia'
+        };
+
+        function initFiltros() {
+            const ano = new Date().getFullYear();
+            const select = document.getElementById('filter-ano');
+            for (let y = ano - 2; y <= ano + 1; y++) {
+                const opt = new Option(y, y, y === ano, y === ano);
+                select.add(opt);
+            }
+            document.getElementById('filter-mes').value = new Date().getMonth() + 1;
+        }
+
+        document.getElementById('aplicar-filtros').onclick = () => {
+            ['ano', 'mes', 'dia', 'periodo', 'operacao', 'tomador', 'granularidade'].forEach(k => {
+                const el = document.getElementById('filter-' + k);
+                if (el) filtros[k] = el.value || '';
+            });
+            carregarDados();
+        };
+
+        async function carregarDados() {
+            const status = document.getElementById('ctes-status');
+            status.innerHTML = '<small class="text-primary"><i class="bi bi-arrow-clockwise"></i> Carregando...</small>';
+
+            try {
+                const params = new URLSearchParams(filtros);
+                const url = `${API_URL}?${params}`;
+                const res = await fetch(url, {
+                    credentials: 'same-origin',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+
+                const contentType = res.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const text = await res.text();
+                    throw new Error("Resposta inválida do servidor");
+                }
+
+                const data = await res.json();
+
+                document.getElementById('card-ctes').textContent = data.totais?.ctes || 0;
+                document.getElementById('card-valor').textContent = formatCurrency(data.totais?.valor_faturado || 0);
+                document.getElementById('card-volume').textContent = data.totais?.volume || 0;
+                document.getElementById('card-peso').textContent = `${(data.totais?.peso || 0).toLocaleString('pt-BR')} kg`;
+
+                const compMap = {
+                    valor_faturado: 'comp-valor-faturado',
+                    frete_peso: 'comp-frete-peso',
+                    advalorem: 'comp-advalorem',
+                    gerenciamento_risco: 'comp-gris',
+                    icms: 'comp-icms',
+                    pedagio: 'comp-pedagio'
+                };
+                Object.keys(compMap).forEach(key => {
+                    const id = compMap[key];
+                    const el = document.getElementById(id);
+                    if (el) el.textContent = formatCurrency(data.composicao?.[key] || 0);
+                });
+
+                ['operacao', 'tomador'].forEach(f => {
+                    const select = document.getElementById('filter-' + f);
+                    const current = select.value;
+                    select.innerHTML = '<option value="">Todos</option>';
+                    (data[f + 's'] || []).forEach(item => {
+                        const opt = new Option(item, item, false, item === current);
+                        select.add(opt);
+                    });
+                });
+
+                updateChart('chart-visao-geral', createBarLineChart(data.serie_temporal || []));
+                updateChart('chart-composicao', createDoughnutChart(data.composicao || {}));
+                updateChart('chart-por-operacao', createHorizontalBar(data.por_operacao || [], 'Operação'));
+                updateChart('chart-por-tomador', createHorizontalBar(data.por_tomador || [], 'Tomador'));
+                updateTable('tabela-ultimos-ctes', data.ultimos_ctes || []);
+                updateTable('tabela-analitico', data.resumo_analitico || []);
+
+                status.innerHTML = `<small class="text-success"><i class="bi bi-check-circle"></i> Atualizado: ${new Date().toLocaleTimeString()}</small>`;
+                document.getElementById('ctes-current-time').textContent = new Date().toLocaleDateString('pt-BR');
+
+                // Restaura aba ativa
+                const activeTab = document.querySelector('.tab-btn.active')?.getAttribute('data-tab');
+                if (activeTab) {
+                    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+                    document.getElementById(activeTab)?.classList.add('active');
+                }
+
+            } catch (e) {
+                console.error("Erro no dashboard CTEs:", e);
+                status.innerHTML = `<small class="text-danger"><i class="bi  bi-exclamation-triangle"></i> Erro: ${e.message}</small>`;
+            }
+        }
+
+        function formatCurrency(v) {
+            return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0);
+        }
+
+        function updateChart(id, config) {
+            const ctx = document.getElementById(id);
+            if (!ctx) return;
+            const chartCtx = ctx.getContext('2d');
+            if (charts[id]) charts[id].destroy();
+            charts[id] = new Chart(chartCtx, config);
+        }
+
+        function createBarLineChart(data) {
+            return {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d.label || ''),
+                    datasets: [
+                        {
+                            label: 'Valor Faturado',
+                            data: data.map(d => d.valor_faturado || 0),
+                            backgroundColor: 'rgba(16, 137, 195, 0.7)',
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'CTEs',
+                            data: data.map(d => d.ctes || 0),
+                            type: 'line',
+                            borderColor: '#FF9800',
+                            backgroundColor: 'rgba(255, 152, 0, 0.2)',
+                            yAxisID: 'y1',
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { position: 'top' } },
+                    scales: {
+                        y: { beginAtZero: true },
+                        y1: { position: 'right', beginAtZero: true, grid: { drawOnChartArea: false } }
+                    }
+                }
+            };
+        }
+
+        function createDoughnutChart(comp) {
+            const values = [comp.frete_peso, comp.advalorem, comp.gerenciamento_risco, comp.icms, comp.pedagio].map(v => v || 0);
+            return {
+                type: 'doughnut',
+                data: {
+                    labels: ['Frete Peso', 'Ad Valorem', 'GRIS', 'ICMS', 'Pedágio'],
+                    datasets: [{ data: values, backgroundColor: ['#1089c3', '#26A69A', '#FF9800', '#F44336', '#9C27B0'] }]
+                },
+                options: { responsive: true, plugins: { legend: { position: 'right' } } }
+            };
+        }
+
+        function createHorizontalBar(data, label) {
+            return {
+                type: 'bar',
+                data: {
+                    labels: data.map(d => d.grupo || ''),
+                    datasets: [{
+                        label,
+                        data: data.map(d => d.valor || 0),
+                        backgroundColor: label === 'Operação' ? '#1089c3' : '#26A69A'
+                    }]
+                },
+                options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: false } } }
+            };
+        }
+
+        function updateTable(id, data) {
+            const tbody = document.querySelector(`#${id} tbody`);
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            data.slice(0, id.includes('ultimos') ? 10 : data.length).forEach(item => {
+                const tr = document.createElement('tr');
+                if (id.includes('ultimos')) {
+                    tr.innerHTML = `
+                        <td><code>${item.numero_cte || '—'}</code></td>
+                        <td>${item.origem_destino || '—'}</td>
+                        <td title="${item.tomador_info || ''}">${item.tomador_info || '—'}</td>
+                        <td class="text-end fw-bold">${formatCurrency(item.valor_frete || 0)}</td>
+                        <td class="text-center text-muted small">${item.data_emissao ? new Date(item.data_emissao).toLocaleString('pt-BR') : '—'}</td>
+                    `;
+                } else {
+                    tr.innerHTML = `
+                        <td><strong>${item.tipo || '—'}</strong></td>
+                        <td>${item.grupo || '—'}</td>
+                        <td>${item.ctes || 0}</td>
+                        <td>${formatCurrency(item.valor || 0)}</td>
+                        <td>${(item.peso || 0).toLocaleString()} kg</td>
+                        <td>${item.volume || 0}</td>
+                    `;
+                }
+                tbody.appendChild(tr);
+            });
+        }
+
+        initFiltros();
+        carregarDados();
+        setInterval(carregarDados, 60000);
+    })();
+
+    // Navegação dinâmica
+    function showContent(id) {
+        document.querySelectorAll('.content-area').forEach(area => area.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.querySelectorAll('.nav-submenu .nav-link').forEach(link => link.classList.remove('active'));
+        const link = document.querySelector(`.nav-submenu .nav-link[onclick="showContent('${id}')"]`);
+        if (link) link.classList.add('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const now = new Date().toLocaleDateString('pt-BR');
+        document.querySelectorAll('[id^="current-date"]').forEach(el => el.textContent = now);
+    });
 </script>
 {% endblock %}
