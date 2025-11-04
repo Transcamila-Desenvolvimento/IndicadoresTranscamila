@@ -20,5 +20,5 @@ urlpatterns = [
     path('provisao/lancamentoaeepc/', views.lancamento, name='lancamento'),
     path('marketing/transcamilanews/', views.transcamilanews, name='transcamilanews'),
     path('marketing/insightsinstagram/', views.insightsinstagram, name='insightsinstagram'),
-    path('api/ctes-dashboard/', views.api_ctes_dashboard, name='api_ctes_dashboard'),
+    path('api/ctes/dashboard/', views.api_ctes_dashboard, name='api_ctes_dashboard'),
 ]
