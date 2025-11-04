@@ -102,36 +102,164 @@ def transcamilanews(request):
 def insightsinstagram(request):
     return render(request, 'indicadores/Marketing/instagram.html')
 
+# dashboard/views.py
 from django.http import JsonResponse
-from datetime import date
-from django.db.models import Sum
+from django.contrib.admin.views.decorators import staff_member_required
+from django.db.models import Sum, Count
+from django.utils import timezone
+from datetime import datetime
+from .models import CTe
+import calendar
 
+@staff_member_required
 def api_ctes_dashboard(request):
-    hoje = date.today()
-    ctes_hoje = CTe.objects.filter(data_emissao__date=hoje).order_by('-data_emissao')[:10]
+    # === PARÂMETROS COM VALIDAÇÃO ===
+    ano = request.GET.get('ano')
+    mes = request.GET.get('mes')
+    dia = request.GET.get('dia')  # formato: YYYY-MM-DD
+    operacao = request.GET.get('operacao')
+    tomador = request.GET.get('tomador')
+    granularidade = request.GET.get('granularidade', 'dia')
 
-    total = CTe.objects.filter(data_emissao__date=hoje).count()
-    valor_total = CTe.objects.filter(data_emissao__date=hoje).aggregate(total=Sum('valor_frete'))['total'] or 0
-    media_frete = valor_total / total if total > 0 else 0
-    peso_total = CTe.objects.filter(data_emissao__date=hoje).aggregate(total=Sum('peso'))['total'] or 0
+    # === FILTROS BASE ===
+    qs = CTe.objects.all()
 
-    # Construir manualmente os campos calculados
-    ultimos_ctes = []
-    for cte in ctes_hoje:
-        ultimos_ctes.append({
-            'numero_cte': cte.numero_cte,
-            'origem_destino': f"{cte.cidade_origem}/{cte.uf_origem} → {cte.cidade_destino}/{cte.uf_destino}",
-            'tomador_info': f"{cte.tomador_razao_social} ({cte.tomador_tipo})" if cte.tomador_razao_social else "Não identificado",
-            'valor_frete': float(cte.valor_frete),
-            'data_emissao': cte.data_emissao.isoformat() if cte.data_emissao else None
+    if ano:
+        try:
+            ano = int(ano)
+            qs = qs.filter(data_emissao__year=ano)
+        except ValueError:
+            pass
+
+    if mes:
+        try:
+            mes = int(mes)
+            qs = qs.filter(data_emissao__month=mes)
+        except ValueError:
+            pass
+
+    if dia:
+        try:
+            dia_dt = datetime.strptime(dia, '%Y-%m-%d')
+            qs = qs.filter(data_emissao__year=dia_dt.year, data_emissao__month=dia_dt.month, data_emissao__day=dia_dt.day)
+        except ValueError:
+            pass
+
+    if operacao:
+        qs = qs.filter(tomador_tipo__icontains=operacao)
+
+    if tomador:
+        qs = qs.filter(tomador_cnpj=tomador)
+
+    # === DADOS PRINCIPAIS ===
+    totais = qs.aggregate(
+        ctes=Count('id'),
+        valor_faturado=Sum('valor_frete'),
+        volume=Sum('volumes'),
+        peso=Sum('peso')
+    )
+
+    # === COMPOSIÇÃO DO FRETE ===
+    composicao = qs.aggregate(
+        valor_faturado=Sum('valor_frete'),
+        frete_peso=Sum('frete_peso'),
+        advalorem=Sum('advalorem'),
+        gerenciamento_risco=Sum('gerenciamento_risco'),
+        icms=Sum('icms'),
+        pedagio=Sum('pedagio')
+    )
+
+    # === SÉRIE TEMPORAL (SQLite-friendly) ===
+    serie_temporal = []
+    ctes_por_data = qs.values('data_emissao').annotate(
+        ctes=Count('id'),
+        valor_faturado=Sum('valor_frete')
+    ).order_by('data_emissao')
+
+    for item in ctes_por_data:
+        data = item['data_emissao']
+        if not data:
+            continue
+        if granularidade == 'dia':
+            label = data.strftime('%d/%m')
+        elif granularidade == 'semana':
+            week = data.isocalendar()[1]
+            label = f"{week:02d}/SEM"
+        elif granularidade == 'mes':
+            label = data.strftime('%m/%Y')
+        else:
+            label = data.strftime('%d/%m')
+
+        serie_temporal.append({
+            'label': label,
+            'ctes': item['ctes'],
+            'valor_faturado': float(item['valor_faturado'] or 0)
         })
 
-    data = {
-        'total': total,
-        'valor_total': float(valor_total),
-        'media_frete': float(media_frete),
-        'peso_total': float(peso_total),
-        'ultimos_ctes': ultimos_ctes
+    # === POR OPERAÇÃO E TOMADOR ===
+    por_operacao = list(qs.values('tomador_tipo')
+                        .annotate(valor=Sum('valor_frete'))
+                        .order_by('-valor')[:10])
+    for item in por_operacao:
+        item['grupo'] = item.pop('tomador_tipo') or 'Não informado'
+        item['valor'] = float(item['valor'] or 0)
+
+    por_tomador = list(qs.values('tomador_cnpj', 'tomador_razao_social')
+                       .annotate(valor=Sum('valor_frete'))
+                       .order_by('-valor')[:10])
+    for item in por_tomador:
+        nome = item.pop('tomador_razao_social') or 'Não informado'
+        item['grupo'] = f"{nome} ({item.pop('tomador_cnpj')})"
+        item['valor'] = float(item['valor'] or 0)
+
+    # === ÚLTIMOS CTEs ===
+    ultimos_ctes = qs.order_by('-data_emissao')[:10]
+    ultimos_ctes_list = []
+    for cte in ultimos_ctes:
+        ultimos_ctes_list.append({
+            'numero_cte': cte.numero_cte,
+            'origem_destino': cte.origem_destino,  # usa @property
+            'tomador_info': cte.tomador_info,      # usa @property
+            'valor_frete': float(cte.valor_frete),
+            'data_emissao': cte.data_emissao.isoformat()
+        })
+
+    # === RESUMO ANALÍTICO ===
+    resumo_analitico = list(qs.values('tomador_tipo')
+                            .annotate(
+                                ctes=Count('id'),
+                                valor=Sum('valor_frete'),
+                                peso=Sum('peso'),
+                                volume=Sum('volumes')
+                            ).order_by('-valor'))
+    for item in resumo_analitico:
+        item['tipo'] = 'Frete'
+        item['grupo'] = item.pop('tomador_tipo') or 'Não informado'
+        item['ctes'] = item['ctes']
+        item['valor'] = float(item['valor'] or 0)
+        item['peso'] = float(item['peso'] or 0)
+        item['volume'] = item['volume']
+
+    # === FILTROS DINÂMICOS ===
+    operacaos = sorted(set(qs.values_list('tomador_tipo', flat=True).exclude(tomador_tipo='')))
+    tomadors = sorted(set(qs.values_list('tomador_cnpj', flat=True).exclude(tomador_cnpj='')))
+
+    # === RESPOSTA ===
+    response = {
+        'totais': {
+            'ctes': totais['ctes'] or 0,
+            'valor_faturado': float(totais['valor_faturado'] or 0),
+            'volume': totais['volume'] or 0,
+            'peso': float(totais['peso'] or 0)
+        },
+        'composicao': {k: float(v or 0) for k, v in composicao.items()},
+        'serie_temporal': serie_temporal,
+        'por_operacao': por_operacao,
+        'por_tomador': por_tomador,
+        'ultimos_ctes': ultimos_ctes_list,
+        'resumo_analitico': resumo_analitico,
+        'operacaos': operacaos,
+        'tomadors': tomadors
     }
 
-    return JsonResponse(data)
+    return JsonResponse(response)
