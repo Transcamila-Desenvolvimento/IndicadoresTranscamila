@@ -11,26 +11,31 @@
            
             <hr style="border-color: rgba(255,255,255,0.1); margin: 10px 20px;">
             <ul class="nav nav-pills flex-column mb-auto" style="padding: 0 12px;">
-                <li>
-                    <a href="#" class="nav-link">
-                        <i class="bi bi-bar-chart-line"></i>
-                        Indicadores
-                    </a>
-                    <ul class="nav flex-column nav-submenu mt-2">
-                        <li><a href="#" class="nav-link active" onclick="showContent('faturamento')"><i class="bi bi-cash-coin"></i> Faturamento</a></li>
-                        <li><a href="#" class="nav-link" onclick="showContent('provisao')"><i class="bi bi-receipt"></i> Provisão</a></li>
-                        <li><a href="#" class="nav-link" onclick="showContent('marketing')"><i class="bi bi-bullseye"></i> Marketing</a></li>
-                        <li><a href="#" class="nav-link" onclick="showContent('rh')"><i class="bi bi-people"></i> RH</a></li>
-                        <li><a href="#" class="nav-link" onclick="showContent('financeiro')"><i class="bi bi-bank"></i> Financeiro</a></li>
-                        {% if user.is_authenticated and user.is_staff or user.is_superuser %}
-                        <li><a href="#" class="nav-link" onclick="showContent('saldos-bancarios')"><i class="bi bi-currency-dollar"></i> Saldos Bancários</a></li>
-                        {% endif %}
-                        {% if user.is_authenticated and user.username == 'miguel.ribeiro' %}
-                        <li><a href="#" class="nav-link" onclick="showContent('dashboard-ctes')"><i class="bi bi-truck"></i> CT-es emitidos</a></li>
-                        {% endif %}
-                    </ul>
-                </li>
-            </ul>
+            <li>
+            <a href="#" class="nav-link">
+            <i class="bi bi-bar-chart-line"></i>
+            Indicadores
+            </a>
+            <ul class="nav flex-column nav-submenu mt-2">
+                {% if user.is_authenticated and user.username == 'junior.quintino' %}
+                <li><a href="#" class="nav-link active" onclick="showContent('faturamento')"><i class="bi bi-cash-coin"></i> Faturamento</a></li>
+                <li><a href="#" class="nav-link" onclick="showContent('financeiro')"><i class="bi bi-bank"></i> Financeiro</a></li>
+                {% else %}
+                <li><a href="#" class="nav-link active" onclick="showContent('faturamento')"><i class="bi bi-cash-coin"></i> Faturamento</a></li>
+                <li><a href="#" class="nav-link" onclick="showContent('provisao')"><i class="bi bi-receipt"></i> Provisão</a></li>
+                <li><a href="#" class="nav-link" onclick="showContent('marketing')"><i class="bi bi-bullseye"></i> Marketing</a></li>
+                <li><a href="#" class="nav-link" onclick="showContent('rh')"><i class="bi bi-people"></i> RH</a></li>
+                <li><a href="#" class="nav-link" onclick="showContent('financeiro')"><i class="bi bi-bank"></i> Financeiro</a></li>
+                {% if user.is_authenticated and user.is_staff or user.is_superuser %}
+                    <li><a href="#" class="nav-link" onclick="showContent('saldos-bancarios')"><i class="bi bi-currency-dollar"></i> Saldos Bancários</a></li>
+                {% endif %}
+                {% if user.is_authenticated and user.username == 'miguel.ribeiro' %}
+                    <li><a href="#" class="nav-link" onclick="showContent('dashboard-ctes')"><i class="bi bi-truck"></i> CT-es emitidos</a></li>
+                {% endif %}
+            {% endif %}
+        </ul>
+    </li>
+</ul>
         </div>
        
         <div class="sidebar-footer">
